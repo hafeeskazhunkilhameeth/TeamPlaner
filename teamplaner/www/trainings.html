@@ -28,8 +28,8 @@
 			<table style="width: 100%">
 				{% for sp in spieler[training.name] %}
 				<tr {% if sp[3] == frappe.session.user %}onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}');" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
-					<td style="width: 7%;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
-					<td style="width 93%;">{{ sp[0] }} {{ sp[1] }}</td>
+					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
+					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
 				</tr>
 				{% endfor %}
 			</table>
