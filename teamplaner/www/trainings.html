@@ -1,0 +1,44 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Trainings") }}{% endblock %}
+{% block header %}<h1>{{ _("Trainings") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+<div class="panel-group" id="accordion">
+{% for training in trainings %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
+			{{ training.name }} ({{ teilnehmer[training.name] }} nehmen teil)</a>
+		  </h4>
+		</div>
+		<div id="{{ training.name }}" class="panel-collapse collapse">
+		  <div class="panel-body">
+			<table style="width: 100%">
+				<tr>
+					<td><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
+				</tr>
+			</table>
+			<h4>Teilnehmer</h4>
+			<table style="width: 100%">
+				{% for sp in spieler[training.name] %}
+				<tr {% if sp[3] == frappe.session.user %}onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}');" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
+					<td style="width: 7%;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
+					<td style="width 93%;">{{ sp[0] }} {{ sp[1] }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		  </div>
+		</div>
+	 </div>
+{% endfor %}
+</div> 
+{% endblock %}
+
+
+
