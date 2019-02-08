@@ -266,7 +266,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2019-02-07 15:34:38.911315", 
+ "modified": "2019-02-08 02:16:11.726823", 
  "modified_by": "Administrator", 
  "module": "TeamPlaner", 
  "name": "TeamPlaner Training", 
@@ -334,7 +334,7 @@
    "write": 1
   }
  ], 
- "quick_entry": 1, 
+ "quick_entry": 0, 
  "read_only": 0, 
  "read_only_onload": 0, 
  "route": "", 

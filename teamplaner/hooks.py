@@ -19,8 +19,8 @@ app_license = "MIT"
 # app_include_js = "/assets/teamplaner/js/teamplaner.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/teamplaner/css/teamplaner.css"
-# web_include_js = "/assets/teamplaner/js/teamplaner.js"
+web_include_css = "/assets/teamplaner/css/teamplaner.css"
+web_include_js = "/assets/teamplaner/js/teamplaner.js"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
@@ -31,13 +31,15 @@ app_license = "MIT"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
-
+# website_route_rules = [
+	# {"from_route": "/me", "to_route": "mein-profil"}
+# ]
 
 # Home Pages
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "start"
 
 # website user home page (by Role)
 # role_home_page = {
