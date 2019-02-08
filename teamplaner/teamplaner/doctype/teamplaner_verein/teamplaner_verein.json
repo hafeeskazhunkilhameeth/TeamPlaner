@@ -174,7 +174,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2019-02-07 15:40:23.665368", 
+ "modified": "2019-02-08 02:15:58.618176", 
  "modified_by": "Administrator", 
  "module": "TeamPlaner", 
  "name": "TeamPlaner Verein", 
@@ -222,7 +222,7 @@
    "write": 1
   }
  ], 
- "quick_entry": 1, 
+ "quick_entry": 0, 
  "read_only": 0, 
  "read_only_onload": 0, 
  "search_fields": "title", 

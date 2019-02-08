@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from frappe.utils.data import add_days
 
 class TeamPlanerTraining(Document):
 	def before_save(self):
@@ -18,3 +19,27 @@ class TeamPlanerTraining(Document):
 				row.position = spieler.position
 				row.status = 'Anwesend'
 				row.mail = spieler.mail
+				
+@frappe.whitelist()
+def massenanlage(von, bis, start, anz, team, ort):
+	#frappe.throw("OK")
+	i = 0
+	while i < int(anz):
+		try:
+			faktor = i * 7
+			if faktor > 0:
+				datum = add_days(start, faktor)
+			else:
+				datum = start
+			training = frappe.get_doc({
+				"doctype": "TeamPlaner Training",
+				"von": von,
+				"bis": bis,
+				"datum": datum,
+				"team": team,
+				"ort": ort
+			}).insert(ignore_permissions = True)
+			i += 1
+		except:
+			i += 1
+	return "OK"
