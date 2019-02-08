@@ -6,14 +6,14 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 
-def count_teilnehmer(training):
-	return frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `status` = 'Anwesend'""".format(training=training), as_list=True)[0][0]
+def count_teilnehmer(training, doctype):
+	return frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `status` = 'Anwesend' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)[0][0]
 	
-def count_total_teilnehmer(training):
-	return frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}'""".format(training=training), as_list=True)[0][0]
+def count_total_teilnehmer(training, doctype):
+	return frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)[0][0]
 	
-def teilnehmer_details(training):
-	return frappe.db.sql("""SELECT `vorname`, `nachname`, `status`, `mail` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}'""".format(training=training), as_list=True)
+def teilnehmer_details(training, doctype):
+	return frappe.db.sql("""SELECT `vorname`, `nachname`, `status`, `mail` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)
 	
 @frappe.whitelist()
 def change_anwesenheit(training, spieler, status):
