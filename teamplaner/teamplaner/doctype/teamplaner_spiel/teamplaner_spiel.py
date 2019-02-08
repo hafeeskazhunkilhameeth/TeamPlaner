@@ -18,10 +18,20 @@ class TeamPlanerSpiel(Document):
 				row.position = spieler.position
 				row.status = 'Anwesend'
 				row.mail = spieler.mail
-		
-		if not self.linien:
-			for spieler in self.spieler:
-				row = self.append('linien', {})
+
+@frappe.whitelist()
+def load_spieler(spiel):
+	spiel = frappe.get_doc("TeamPlaner Spiel", spiel)
+	if not spiel.linien:
+		for spieler in spiel.spieler:
+			if spieler.status == "Anwesend":
+				sp = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{mail}'""".format(mail=spieler.mail), as_list=True)[0][0]
+				sp_detail = frappe.get_doc("TeamPlaner Mitglied", sp)
+				row = spiel.append('linien', {})
 				row.spielername = spieler.vorname + ' ' + spieler.nachname
 				row.position = spieler.position
-				row.linie = 'Reserve'
+				row.linie = sp_detail.linie
+		spiel.save()
+		return "OK"
+	else:
+		return "NOK"
