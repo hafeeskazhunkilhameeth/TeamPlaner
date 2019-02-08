@@ -1,4 +1,4 @@
-function change_anwesenheit(training, spieler, anmeldung) {	
+function change_anwesenheit(training, spieler, anmeldung, tr) {	
 	//frappe.msgprint(spieler);
 	frappe.call({
 		method: "teamplaner.utils.change_anwesenheit",
@@ -10,9 +10,11 @@ function change_anwesenheit(training, spieler, anmeldung) {
 		callback: function(r)
 		{
 			
-			frappe.msgprint("Die Änderung wurde übernommen und die Seite in kürze neu geladen.");
-			
-			setTimeout(function(){ location.reload(); }, 1500);
+			if (tr.style.backgroundColor == "red") {
+				tr.style.backgroundColor = "#50D050";
+			} else {
+				tr.style.backgroundColor = "red";
+			}
 		}
 	});
 }
