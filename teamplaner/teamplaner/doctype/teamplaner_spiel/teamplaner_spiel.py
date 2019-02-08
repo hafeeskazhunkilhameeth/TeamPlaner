@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from frappe.utils.data import getdate
 
 class TeamPlanerSpiel(Document):
 	def before_save(self):
@@ -18,6 +19,7 @@ class TeamPlanerSpiel(Document):
 				row.position = spieler.position
 				row.status = 'Anwesend'
 				row.mail = spieler.mail
+		self.beschriftung = getdate(self.datum).strftime("%d.%m.%Y")
 
 @frappe.whitelist()
 def load_spieler(spiel):

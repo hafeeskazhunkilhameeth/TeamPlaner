@@ -14,7 +14,7 @@
 		<div class="panel-heading">
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
-			{{ training.name }} ({{ teilnehmer[training.name] }} nehmen teil)<br>{% if training.aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}<br>{% if training.aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
 		  </h4>
 		</div>
 		<div id="{{ training.name }}" class="panel-collapse collapse">
