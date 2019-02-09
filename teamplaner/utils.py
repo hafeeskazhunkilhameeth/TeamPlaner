@@ -21,8 +21,9 @@ def change_anwesenheit(training, spieler, status, busse="keine"):
 	if status == "Anwesend":
 		new_status = "Abwesend"
 		if busse != 'keine':
-			add_busse(spieler, training)
-			antwort = "busse"
+			if frappe.db.get_single_value('TeamPlaner Bussen', 'busse_anwesenheitskontrolle') == 1:
+				add_busse(spieler, training)
+				antwort = "busse"
 	else:
 		new_status = "Anwesend"
 		
@@ -30,13 +31,14 @@ def change_anwesenheit(training, spieler, status, busse="keine"):
 	return antwort
 	
 def add_busse(spieler, training):
+	busse = frappe.db.sql("""SELECT `beschreibung`, `betrag` FROM `tabTeamPlaner Bussenkatalog` WHERE `standard` = 1 LIMIT 1""", as_list=True)[0]
 	training = frappe.get_doc("TeamPlaner Training", training)
 	mitglied = frappe.get_doc("TeamPlaner Mitglied", frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{mail}'""".format(mail=spieler), as_list=True)[0][0])
 	row = mitglied.append('bussen', {})
 	row.training = 1
-	row.bemerkung = "Nachträgliche Abmeldung vom " + training.beschriftung
+	row.bemerkung = busse[0] + " - " + training.beschriftung
 	row.referenz = training.name
-	row.betrag = 5
+	row.betrag = busse[1]
 	mitglied.save()
 
 	
