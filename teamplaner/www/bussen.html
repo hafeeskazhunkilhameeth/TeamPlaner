@@ -1,0 +1,32 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Bussen") }}{% endblock %}
+{% block header %}<h1>{{ _("Meine unbezahlten Bussen") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Referenz</th>
+        <th>Begründung</th>
+        <th>Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+	{% for busse in bussen %}
+      <tr>
+        <td>{% if busse[0] == 1 %}Training{% else %}Spiel{% endif %}</td>
+        <td>{{ busse[2] }}</td>
+        <td>Fr. {{'%0.2f' % busse[3]|float }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
+
