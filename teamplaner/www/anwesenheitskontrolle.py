@@ -12,7 +12,7 @@ from frappe.utils.data import nowdate, add_days
 def get_context(context):
 	if frappe.session.user=='Guest':
 		frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
-	if "TeamPlaner Trainer" not in frappe.get_roles(frappe.session.user):
+	if "TeamPlaner Anwesenheitskontrolleur" not in frappe.get_roles(frappe.session.user):
 		frappe.throw(_("You need a special role to access this page"), frappe.PermissionError)
 	context.show_sidebar=True
 	context['trainings'] = frappe.client.get_list('TeamPlaner Training', fields=['name', 'von', 'bis', 'ort', 'beschriftung'], filters=[['datum','>=',add_days(nowdate(), -3)]], order_by='name', limit_page_length=1000)
