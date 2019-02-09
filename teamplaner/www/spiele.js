@@ -77,3 +77,13 @@ function show_aufgebot(spiel) {
 		}
 	});
 }
+
+function alle_trainings_laden() {
+	var acc = document.getElementById("accordion_kurz");
+	var btn = document.getElementById("show_all_btn");
+	var show = document.getElementById("accordion");
+	
+	acc.classList.add("hidden");
+	btn.classList.add("hidden");
+	show.classList.remove("hidden");
+}

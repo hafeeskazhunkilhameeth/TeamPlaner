@@ -16,7 +16,12 @@ def get_context(context):
 	context['trainings'] = frappe.client.get_list('TeamPlaner Spiel', fields=['name', 'von', 'bis', 'ort', 'aufgebot_status', 'beschriftung', 'gegner'], filters=[['datum','>=',nowdate()]], order_by='name', limit_page_length=1000)
 	context['teilnehmer'] = {}
 	context['spieler'] = {}
+	i = 1
+	context['trainings_kurz'] = []
 	for training in context['trainings']:
+		if i <= 5:
+			context['trainings_kurz'].append(training)
+			i += 1
 		teiln = count_teilnehmer(training.name, 'TeamPlaner Spiel')
 		total = count_total_teilnehmer(training.name, 'TeamPlaner Spiel')
 		context['teilnehmer'][training.name] = '{teiln} von {total}'.format(teiln=teiln, total=total)

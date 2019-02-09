@@ -11,7 +11,41 @@
 <div class="jumbotron">
 	<center><p><strong>Achtung:</strong> wenn Du einen ursprünglich angemeldeten Spieler abmeldest, wird eine Busse gegen diesen Spieler ausgelöst! Bereits ausgelöste Bussen können nur via Backend zurückgezogen werden!</p></center><br>
 </div>
-<div class="panel-group" id="accordion">
+<div class="panel-group" id="accordion_kurz">
+{% for training in trainings_kurz %}
+	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }})</a>
+		  </h4>
+		</div>
+		<div id="{{ training.name }}" class="panel-collapse collapse">
+		  <div class="panel-body">
+			<table style="width: 100%">
+				<tr>
+					<td><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
+				</tr>
+			</table>
+			<h4>Teilnehmer</h4>
+			<table style="width: 100%">
+				{% for sp in spieler[training.name] %}
+				<tr {% if stundensperre >= -3 %}onclick="busse('{{ training.name }}', '{{ sp[3] }}', '{{ sp[2] }}', this);" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
+					<td style="width: 10%; height: 30px;">&nbsp;<i class="fa fa-exchange"></i></td>
+					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		  </div>
+		</div>
+	 </div>
+{% endfor %}
+</div> 
+
+<button type="button" class="btn btn-primary btn-block" onclick="alle_trainings_laden();" id="show_all_btn">Alle Trainings laden</button>
+
+<div class="panel-group hidden" id="accordion">
 {% for training in trainings %}
 	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
 	<div class="panel panel-default">
