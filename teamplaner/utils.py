@@ -16,13 +16,29 @@ def teilnehmer_details(training, doctype):
 	return frappe.db.sql("""SELECT `vorname`, `nachname`, `status`, `mail` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)
 	
 @frappe.whitelist()
-def change_anwesenheit(training, spieler, status):
+def change_anwesenheit(training, spieler, status, busse="keine"):
+	antwort = "keine_busse"
 	if status == "Anwesend":
 		new_status = "Abwesend"
+		if busse != 'keine':
+			add_busse(spieler, training)
+			antwort = "busse"
 	else:
 		new_status = "Anwesend"
+		
 	frappe.db.sql("""UPDATE `tabTeamPlaner Spieler Verweis Anwesenheit` SET `status` = '{new_status}' WHERE `parent` = '{training}' AND `mail` = '{mail}'""".format(new_status=new_status, mail=spieler, training=training), as_list=True)
-	return "OK"
+	return antwort
+	
+def add_busse(spieler, training):
+	training = frappe.get_doc("TeamPlaner Training", training)
+	mitglied = frappe.get_doc("TeamPlaner Mitglied", frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{mail}'""".format(mail=spieler), as_list=True)[0][0])
+	row = mitglied.append('bussen', {})
+	row.training = 1
+	row.bemerkung = "Nachträgliche Abmeldung vom " + training.beschriftung
+	row.referenz = training.name
+	row.betrag = 5
+	mitglied.save()
+
 	
 @frappe.whitelist()
 def get_aufgebot(spiel):

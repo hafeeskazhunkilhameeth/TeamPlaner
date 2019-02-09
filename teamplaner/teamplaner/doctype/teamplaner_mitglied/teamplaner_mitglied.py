@@ -13,10 +13,10 @@ class TeamPlanerMitglied(Document):
 		delete_links_in_anwesenheit = frappe.db.sql("""DELETE FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `mail` = '{mail}'""".format(mail=self.mail), as_list=True)
 		try:
 			user = frappe.get_doc("User", self.mail)
+			if user:
+				user.delete()
 		except:
 			pass
-		if user:
-			user.delete()
 		msgprint("Alle Training und Spiel Anwesenheiten dieses Mitgliedes, sowie die Zugangsdaten wurden gelöscht")
 	def before_save(self):
 		self.beschriftung = self.vorname + " " + self.nachname
