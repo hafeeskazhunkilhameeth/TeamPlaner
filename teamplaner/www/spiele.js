@@ -78,7 +78,7 @@ function show_aufgebot(spiel) {
 	});
 }
 
-function alle_trainings_laden() {
+function alle_spiele_laden() {
 	var acc = document.getElementById("accordion_kurz");
 	var btn = document.getElementById("show_all_btn");
 	var show = document.getElementById("accordion");
