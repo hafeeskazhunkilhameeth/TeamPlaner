@@ -100,7 +100,7 @@
    "reqd": 1, 
    "search_index": 0, 
    "set_only_once": 0, 
-   "unique": 0
+   "unique": 1
   }, 
   {
    "allow_bulk_edit": 0, 
@@ -173,7 +173,7 @@
  "issingle": 0, 
  "istable": 1, 
  "max_attachments": 0, 
- "modified": "2019-02-09 18:34:38.112968", 
+ "modified": "2019-02-11 22:17:32.239700", 
  "modified_by": "Administrator", 
  "module": "TeamPlaner", 
  "name": "TeamPlaner Bussenkatalog", 

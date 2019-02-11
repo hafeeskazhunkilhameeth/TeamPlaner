@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import msgprint
 from frappe.model.document import Document
+from frappe.utils.data import getdate
 
 class TeamPlanerMitglied(Document):
 	self = Document
@@ -84,5 +85,33 @@ def add_user_to_events(mitglied):
 	return "OK"
 	
 @frappe.whitelist()
-def add_busse(mitglied):
+def add_busse(mitglied, busse, datum, beschreibung=None, training=None, spiel=None, betrag=None):
+	if busse == "Eigene":
+		mitglied = frappe.get_doc("TeamPlaner Mitglied", mitglied)
+		row = mitglied.append('bussen', {})
+		row.training = training
+		row.spiel = spiel
+		row.bemerkung = beschreibung + " - " + getdate(datum).strftime("%d.%m.%Y")
+		row.betrag = betrag
+		mitglied.save()
+	else:
+		mitglied = frappe.get_doc("TeamPlaner Mitglied", mitglied)
+		busse = frappe.db.sql("""SELECT `training`, `spiel`, `betrag`, `beschreibung` FROM `tabTeamPlaner Bussenkatalog` WHERE `beschreibung` = '{beschreibung}'""".format(beschreibung=busse), as_dict=True)[0]
+		row = mitglied.append('bussen', {})
+		row.training = busse.training
+		row.spiel = busse.spiel
+		row.bemerkung = busse.beschreibung + " - " + getdate(datum).strftime("%d.%m.%Y")
+		row.betrag = busse.betrag
+		mitglied.save()
+		
 	return "OK"
+	
+	
+@frappe.whitelist()
+def get_bussen():
+	data = []
+	bussen = frappe.db.sql("""SELECT `beschreibung` FROM `tabTeamPlaner Bussenkatalog`""", as_list=True)
+	for busse in bussen:
+		data.append(busse[0])
+	data.append("Eigene")
+	return data
