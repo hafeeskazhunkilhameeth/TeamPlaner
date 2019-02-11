@@ -26,6 +26,17 @@ frappe.ui.form.on('TeamPlaner Mitglied', {
 					}
 				});
 			});
+			frm.add_custom_button(__("Busse hinzufügen"), function() {
+				return frappe.call({
+					method: "teamplaner.teamplaner.doctype.teamplaner_mitglied.teamplaner_mitglied.add_busse",
+					args: {
+						mitglied: frm.doc.name
+					},
+					callback: function(r) {
+						frappe.msgprint("Die Busse wurde hinzugefügt.");
+					}
+				});
+			});
 		}
 	}
 });

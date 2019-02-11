@@ -559,7 +559,7 @@ let total_monat_chart = new frappe.Chart( "#total_monat", { // or DOM element
           values: [parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2)]
         },
         {
-          name: "Spieler im &Oslash;", chartType: 'line',
+          name: "Spieler im Ø", chartType: 'line',
           values: [total_spieler_jan, total_spieler_feb, total_spieler_mar, total_spieler_apr, total_spieler_mai, total_spieler_jun, total_spieler_jul, total_spieler_aug, total_spieler_sept, total_spieler_okt, total_spieler_nov, total_spieler_dez]
         },
         {

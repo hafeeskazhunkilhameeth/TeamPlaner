@@ -82,3 +82,7 @@ def add_user_to_events(mitglied):
 				row.linie = 'Kein Aufgebot'
 				doc_spiel.save()
 	return "OK"
+	
+@frappe.whitelist()
+def add_busse(mitglied):
+	return "OK"
