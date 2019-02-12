@@ -21,6 +21,8 @@ class TeamPlanerMitglied(Document):
 		msgprint("Alle Training und Spiel Anwesenheiten dieses Mitgliedes, sowie die Zugangsdaten wurden gelöscht")
 	def before_save(self):
 		self.beschriftung = self.vorname + " " + self.nachname
+		for score in self.scorerliste:
+			score.total = score.tor + score.assist
 
 @frappe.whitelist()
 def invite_user(mitglied):

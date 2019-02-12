@@ -1,3 +1,71 @@
+//top 10 scorer
+var sc_spieler = [];
+{% for x in top_ten %}sc_spieler.push('{{ x.vorname }} {{ x.nachname }}');{% endfor %}
+var sc_tore = [];
+{% for x in top_ten %}sc_tore.push({{ x.tor|int }});{% endfor %}
+var sc_assits = [];
+{% for x in top_ten %}sc_assits.push({{ x.assist|int }});{% endfor %}
+var sc_total = [];
+{% for x in top_ten %}sc_total.push({{ x.total|int }});{% endfor %}
+let scorer_top_ten = new frappe.Chart( "#scorer_top_ten", { // or DOM element
+    data: {
+      labels: sc_spieler,
+      datasets: [
+        {
+          name: "Tore", chartType: 'bar',
+          values: sc_tore
+        },
+        {
+          name: "Assists", chartType: 'bar',
+          values: sc_assits
+        },
+        {
+          name: "Total", chartType: 'line',
+          values: sc_total
+        }
+      ]
+    },
+
+    title: "Top 10",
+    type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+    height: 300,
+    colors: ['green', 'light-green', 'light-blue'],
+
+    tooltipOptions: {
+      formatTooltipX: d => (d + '').toUpperCase(),
+      formatTooltipY: d => d + '',
+    }
+  });
+/*   let scorer_top_ten = new frappe.Chart( "#scorer_top_ten", { // or DOM element
+    data: {
+      labels: ["Philip Buchegger", "Martin Christen", "OK", "OK", "OK"],
+      datasets: [
+        {
+          name: "Tore", chartType: 'bar',
+          values: [10, 20, 30, 30, 30]
+        },
+        {
+          name: "Assists", chartType: 'bar',
+          values: [40, 10, 30, 30, 30]
+        },
+        {
+          name: "Total", chartType: 'line',
+          values: [50, 30, 60, 30, 30]
+        }
+      ]
+    },
+
+    title: "Pro Monat",
+    type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+    height: 300,
+    colors: ['green', 'light-green', 'light-blue'],
+
+    tooltipOptions: {
+      formatTooltipX: d => (d + '').toUpperCase(),
+      formatTooltipY: d => d + ' x',
+    }
+  }); */
+
 // spieler präsenz all over
 let spieler_all_over_chart = new frappe.Chart( "#spieler_all_over", {
     data: {

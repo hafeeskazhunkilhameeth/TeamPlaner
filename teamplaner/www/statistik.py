@@ -21,6 +21,7 @@ def get_context(context):
 	context['total_trainings_pro_monat'] = total_pro_monat()['total_anzahl_trainings']
 	context['total_anwesend_pro_monat'] = total_pro_monat()['total_anzahl_anwesend']
 	context['total_abwesend_pro_monat'] = total_pro_monat()['total_anzahl_abwesend']
+	context['top_ten'] = scorerliste()['top_ten']
 
 	return context
 	
@@ -126,5 +127,27 @@ def total_pro_monat():
 													AND `status` = 'Abwesend'
 													AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}')
 													GROUP BY MONTH(`parent`)""".format(jahr=jahr, team=team), as_dict=True)
+	
+	return data
+	
+def scorerliste():
+	data = {}
+	user = frappe.session.user
+	import datetime
+	jahr = str(datetime.date.today().year)
+	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	data['top_ten'] = frappe.db.sql("""SELECT
+											`mitglied`.`vorname` AS 'vorname',
+											`mitglied`.`nachname` AS 'nachname',
+											SUM(`score`.`tor`) AS 'tor',
+											SUM(`score`.`assist`) AS 'assist',
+											SUM(`score`.`total`) AS 'total'
+										FROM `tabTeamPlaner Scorer Liste` AS `score`
+										INNER JOIN `tabTeamPlaner Mitglied` AS `mitglied` ON `score`.`parent` = `mitglied`.`name`
+										WHERE
+											YEAR(`score`.`spiel`) = '2019'
+										GROUP BY `score`.`parent`
+										ORDER BY SUM(`score`.`total`) DESC LIMIT 10""".format(jahr=jahr, team=team), as_dict=True)
 	
 	return data
