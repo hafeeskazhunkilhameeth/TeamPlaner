@@ -67,51 +67,39 @@ var dez_abwesend = 0;
 {% for x in spieler_total_pro_monat %}
 	{% if x.monat == 1 %}
 		jan = {{ x.anzahl }};
-		jan_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 2 %}
 		feb = {{ x.anzahl }};
-		feb_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 3 %}
 		mar = {{ x.anzahl }};
-		mar_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 4 %}
 		apr = {{ x.anzahl }};
-		apr_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 5 %}
 		mai = {{ x.anzahl }};
-		mai_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 6 %}
 		jun = {{ x.anzahl }};
-		jun_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 7 %}
 		jul = {{ x.anzahl }};
-		jul_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 8 %}
 		aug = {{ x.anzahl }};
-		aug_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 9 %}
 		sept = {{ x.anzahl }};
-		sept_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 10 %}
 		okt = {{ x.anzahl }};
-		okt_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 11 %}
 		nov = {{ x.anzahl }};
-		nov_abwesend = {{ x.anzahl }};
 	{% endif %}
 	{% if x.monat == 12 %}
 		dez = {{ x.anzahl }};
-		dez_abwesend = {{ x.anzahl }};
 	{% endif %}
 {% endfor %}
 {% for x in spieler_anwesend_pro_monat %}
@@ -463,86 +451,86 @@ var total_spieler_dez = 0;
 
 if (total_spieler_jan > 0) {
 	var base_jan = 100 / total_spieler_jan;
+	total_spieler_jan = total_jan_anwesend / total_jan_training;
 	total_jan_anwesend = base_jan * total_jan_anwesend;
 	total_jan_abwesend = base_jan * total_jan_abwesend;
-	total_spieler_jan = total_spieler_jan / total_jan_training;
 }
 
 if (total_spieler_feb > 0) {
 	var base_feb = 100 / total_spieler_feb;
+	total_spieler_feb = total_feb_anwesend / total_feb_training;
 	total_feb_anwesend = base_feb * total_feb_anwesend;
 	total_feb_abwesend = base_feb * total_feb_abwesend;
-	total_spieler_feb = total_spieler_feb / total_feb_training;
 }
 
 if (total_spieler_mar > 0) {
 	var base_mar = 100 / total_spieler_mar;
+	total_spieler_mar = total_mar_anwesend / total_mar_training;
 	total_mar_anwesend = base_mar * total_mar_anwesend;
 	total_mar_abwesend = base_mar * total_mar_abwesend;
-	total_spieler_mar = total_spieler_mar / total_mar_training;
 }
 
 if (total_spieler_apr > 0) {
 	var base_apr = 100 / total_spieler_apr;
+	total_spieler_apr = total_apr_anwesend / total_apr_training;
 	total_apr_anwesend = base_apr * total_apr_anwesend;
 	total_apr_abwesend = base_apr * total_apr_abwesend;
-	total_spieler_apr = total_spieler_apr / total_apr_training;
 }
 
 if (total_spieler_mai > 0) {
 	var base_mai = 100 / total_spieler_mai;
+	total_spieler_mai = total_mai_anwesend / total_mai_training;
 	total_mai_anwesend = base_mai * total_mai_anwesend;
 	total_mai_abwesend = base_mai * total_mai_abwesend;
-	total_spieler_mai = total_spieler_mai / total_mai_training;
 }
 
 if (total_spieler_jun > 0) {
 	var base_jun = 100 / total_spieler_jun;
+	total_spieler_jun = total_jun_anwesend / total_jun_training;
 	total_jun_anwesend = base_jun * total_jun_anwesend;
 	total_jun_abwesend = base_jun * total_jun_abwesend;
-	total_spieler_jun = total_spieler_jun / total_jun_training;
 }
 
 if (total_spieler_jul > 0) {
 	var base_jul = 100 / total_spieler_jul;
+	total_spieler_jul = total_jul_anwesend / total_jul_training;
 	total_jul_anwesend = base_jul * total_jul_anwesend;
 	total_jul_abwesend = base_jul * total_jul_abwesend;
-	total_spieler_jul = total_spieler_jul / total_jul_training;
 }
 
 if (total_spieler_aug > 0) {
 	var base_aug = 100 / total_spieler_aug;
+	total_spieler_aug = total_aug_anwesend / total_aug_training;
 	total_aug_anwesend = base_aug * total_aug_anwesend;
 	total_aug_abwesend = base_aug * total_aug_abwesend;
-	total_spieler_aug = total_spieler_aug / total_aug_training;
 }
 
 if (total_spieler_sept > 0) {
 	var base_sept = 100 / total_spieler_sept;
+	total_spieler_sept = total_sept_anwesend / total_sept_training;
 	total_sept_anwesend = base_sept * total_sept_anwesend;
 	total_sept_abwesend = base_sept * total_sept_abwesend;
-	total_spieler_sept = total_spieler_sept / total_sept_training;
 }
 
 if (total_spieler_okt > 0) {
 	var base_okt = 100 / total_spieler_okt;
+	total_spieler_okt = total_okt_anwesend / total_okt_training;
 	total_okt_anwesend = base_okt * total_okt_anwesend;
 	total_okt_abwesend = base_okt * total_okt_abwesend;
-	total_spieler_okt = total_spieler_okt / total_okt_training;
 }
 
 if (total_spieler_nov > 0) {
 	var base_nov = 100 / total_spieler_nov;
+	total_spieler_nov = total_nov_anwesend / total_nov_training;
 	total_nov_anwesend = base_nov * total_nov_anwesend;
 	total_nov_abwesend = base_nov * total_nov_abwesend;
-	total_spieler_nov = total_spieler_nov / total_nov_training;
 }
 
 if (total_spieler_dez > 0) {
 	var base_dez = 100 / total_spieler_dez;
+	total_spieler_dez = total_dez_anwesend / total_dez_training;
 	total_dez_anwesend = base_dez * total_dez_anwesend;
 	total_dez_abwesend = base_dez * total_dez_abwesend;
-	total_spieler_dez = total_spieler_dez / total_dez_training;
 }
 
 
@@ -560,7 +548,7 @@ let total_monat_chart = new frappe.Chart( "#total_monat", { // or DOM element
         },
         {
           name: "Spieler im Ø", chartType: 'line',
-          values: [total_spieler_jan, total_spieler_feb, total_spieler_mar, total_spieler_apr, total_spieler_mai, total_spieler_jun, total_spieler_jul, total_spieler_aug, total_spieler_sept, total_spieler_okt, total_spieler_nov, total_spieler_dez]
+          values: [parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez)]
         },
         {
           name: "Trainings", chartType: 'line',

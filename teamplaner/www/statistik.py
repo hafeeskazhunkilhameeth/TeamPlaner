@@ -96,10 +96,6 @@ def total_pro_monat():
 	user = frappe.session.user
 	import datetime
 	jahr = str(datetime.date.today().year)
-	start_jan = jahr + "01-01"
-	ende_jan = jahr + "-01-"
-	von = str(jahr) + "-01-01"
-	bis = str(jahr) + "-12-31"
 	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
 	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
 	data['total_anzahl_trainings'] = frappe.db.sql("""SELECT
@@ -112,23 +108,23 @@ def total_pro_monat():
 												GROUP BY MONTH(`datum`)""".format(jahr=jahr, team=team), as_dict=True)
 												
 	data['total_anzahl_anwesend'] = frappe.db.sql("""SELECT
-													MONTH(`datum`) AS 'monat',
-													COUNT(`name`) AS 'anzahl'
-												FROM `tabTeamPlaner Training`
-												WHERE
-													YEAR(`datum`) = '{jahr}'
-													AND `team` = '{team}'
-													AND `name` IN (SELECT `parent` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `status` = 'Anwesend')
-												GROUP BY MONTH(`datum`)""".format(jahr=jahr, team=team), as_dict=True)
+														MONTH(`parent`) AS 'monat',
+														COUNT(`name`) AS 'anzahl'
+													FROM `tabTeamPlaner Spieler Verweis Anwesenheit`
+													WHERE
+													YEAR(`parent`) = '{jahr}'
+													AND `status` = 'Anwesend'
+													AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}')
+													GROUP BY MONTH(`parent`)""".format(jahr=jahr, team=team), as_dict=True)
 												
 	data['total_anzahl_abwesend'] = frappe.db.sql("""SELECT
-													MONTH(`datum`) AS 'monat',
-													COUNT(`name`) AS 'anzahl'
-												FROM `tabTeamPlaner Training`
-												WHERE
-													YEAR(`datum`) = '{jahr}'
-													AND `team` = '{team}'
-													AND `name` IN (SELECT `parent` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `status` = 'Abwesend')
-												GROUP BY MONTH(`datum`)""".format(jahr=jahr, team=team), as_dict=True)
+														MONTH(`parent`) AS 'monat',
+														COUNT(`name`) AS 'anzahl'
+													FROM `tabTeamPlaner Spieler Verweis Anwesenheit`
+													WHERE
+													YEAR(`parent`) = '{jahr}'
+													AND `status` = 'Abwesend'
+													AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}')
+													GROUP BY MONTH(`parent`)""".format(jahr=jahr, team=team), as_dict=True)
 	
 	return data
