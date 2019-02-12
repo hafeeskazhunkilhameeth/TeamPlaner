@@ -1,0 +1,44 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Scorerboard") }}{% endblock %}
+{% block header %}<h1>{{ _("Scorerboard") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+<form>
+	<div class="form-group">
+		<label for="sel1">Spiel</label>
+		<select class="form-control" id="spiel">
+			{% for spiel in alle_spiele.spiele %}
+				<option>{{ spiel.name }}</option>
+			{% endfor %}
+		</select>
+	</div>
+</form>
+
+	 // <br>
+<table class="table table-hover">
+<thead>
+  <tr>
+	<th>Spieler</th>
+	<th>Tore</th>
+	<th>Assists</th>
+  </tr>
+</thead>
+<tbody>
+{% for tabelle in alle_spiele.tabellen %}
+  <tr data-spiel='{{ tabelle.parent }}' data-mail='{{ tabelle.mail }}'>
+	<td>{{ tabelle.vorname }} {{ tabelle.nachname }}</td>
+	<td></td>
+	<td></td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+
+
+
