@@ -12,8 +12,8 @@
 	<div class="form-group">
 		<label for="sel1">Spiel</label>
 		<select class="form-control" id="spiel">
-			{% for spiel in alle_spiele.spiele %}
-				<option>{{ spiel.name }}</option>
+			{% for spiel in spiele %}
+				<option>{{ spiel }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -26,14 +26,24 @@
 	<th>Spieler</th>
 	<th>Tore</th>
 	<th>Assists</th>
+	<th>Update</th>
   </tr>
 </thead>
 <tbody>
-{% for tabelle in alle_spiele.tabellen %}
-  <tr data-spiel='{{ tabelle.parent }}' data-mail='{{ tabelle.mail }}'>
+{% for tabelle in tabellendaten %}
+  <tr data-spiel='{{ tabelle.spiel }}' data-mail='{{ tabelle.mail }}'>
 	<td>{{ tabelle.vorname }} {{ tabelle.nachname }}</td>
-	<td></td>
-	<td></td>
+	<td>
+		<div class="form-group">
+		  <input type="text" class="form-control" value="{{ tabelle.tor }}">
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+		  <input type="text" class="form-control" value="{{ tabelle.assist }}">
+		</div>
+	</td>
+	<td><button class="btn btn-primary">Update</button></td>
   </tr>
 {% endfor %}
 </tbody>

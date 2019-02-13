@@ -84,6 +84,14 @@ def add_user_to_events(mitglied):
 				row.position = spieler.position
 				row.linie = 'Kein Aufgebot'
 				doc_spiel.save()
+			score = frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Scorer Liste` WHERE `Parent` = '{mail}'""".format(mail=spieler.mail), as_list=True)[0][0]
+			if score == 0:
+				row = spieler.append('scorerliste', {})
+				row.spiel = spiel
+				row.tor = 0
+				row.assist = 0
+				row.total = 0
+				spieler.save()
 	return "OK"
 	
 @frappe.whitelist()

@@ -15,11 +15,20 @@ def get_context(context):
 	if "TeamPlaner Scorer" not in frappe.get_roles(frappe.session.user):
 		frappe.throw(_("You need a special role to access this page"), frappe.PermissionError)
 	context.show_sidebar=True
-	context['alle_spiele'] = {}
-	context['alle_spiele']['spiele'] = {}
-	spiele = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Spiel` WHERE YEAR(`name`) = YEAR(CURDATE())""", as_dict=True)
-	context['alle_spiele']['spiele'] = spiele
-	for spiel in spiele:
-		context['alle_spiele']['tabellen'] = frappe.db.sql("""SELECT `vorname`, `nachname`, `mail`, `parent` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{spiel}' AND `parenttype` = 'TeamPlaner Spiel'""".format(spiel=spiel.name), as_dict=True)
-		
+	context['tabellendaten'] = frappe.db.sql("""SELECT DISTINCT
+												`spiele`.`name` AS `spiel`,
+												`mitglied_verweis`.`mail`,
+												`mitglied`.`vorname`,
+												`mitglied`.`nachname`,
+												`scorerliste`.`tor`,
+												`scorerliste`.`assist`,
+												`scorerliste`.`total`
+											FROM (((`tabTeamPlaner Spiel` AS `spiele`
+											INNER JOIN `tabTeamPlaner Spieler Verweis Anwesenheit` AS `mitglied_verweis` ON `spiele`.`name` = `mitglied_verweis`.`parent`)
+											INNER JOIN `tabTeamPlaner Mitglied` AS `mitglied` ON `mitglied`.`mail` = `mitglied_verweis`.`mail`)
+											INNER JOIN `tabTeamPlaner Scorer Liste` AS `scorerliste` ON `spiele`.`name` = `scorerliste`.`spiel`)""", as_dict=True)
+	context['spiele'] = []
+	for x in context['tabellendaten']:
+		if x.spiel not in context['spiele']:
+			context['spiele'].append(x.spiel)
 	return context

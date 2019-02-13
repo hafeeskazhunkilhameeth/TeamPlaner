@@ -19,7 +19,24 @@ class TeamPlanerSpiel(Document):
 				row.position = spieler.position
 				row.status = 'Anwesend'
 				row.mail = spieler.mail
+
 		self.beschriftung = getdate(self.datum).strftime("%d.%m.%Y")
+	
+	def on_trash(self):
+		delete_links = frappe.db.sql("""DELETE FROM `tabTeamPlaner Scorer Liste` WHERE `spiel` = '{spiel}'""".format(spiel=self.name), as_list=True)
+		
+	def after_insert(self):
+		alle_spieler = frappe.get_all('Teamplaner Team Verweis', filters={'team': self.team}, fields=['parent'])
+		for _spieler in alle_spieler:
+			spieler = frappe.get_doc('TeamPlaner Mitglied', _spieler.parent)
+			score = frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Scorer Liste` WHERE `Parent` = '{mail}'""".format(mail=spieler.mail), as_list=True)[0][0]
+			if score == 0:
+				row = spieler.append('scorerliste', {})
+				row.spiel = self.name
+				row.tor = 0
+				row.assist = 0
+				row.total = 0
+				spieler.save()
 
 @frappe.whitelist()
 def load_spieler(spiel):
