@@ -8,21 +8,23 @@
 {% endblock %}
 
 {% block page_content %}
+<div class="col-xs-12">
+<div id="scorer_top_ten"></div>
+</div>
 <form>
 	<div class="form-group">
-		<label for="sel1">Spiel</label>
-		<select class="form-control" id="spiel">
+		<label for="sel1">Spiel Auswahl</label>
+		<select class="form-control" id="spiel" onChange="show_spiel_tabelle(this)">
+			<option>Bitte Spiel auswählen</option>
 			{% for spiel in spiele %}
 				<option>{{ spiel }}</option>
 			{% endfor %}
 		</select>
 	</div>
 </form>
-
-	 // <br>
 <table class="table table-hover">
 <thead>
-  <tr>
+  <tr id="tr_header">
 	<th>Spieler</th>
 	<th>Tore</th>
 	<th>Assists</th>
@@ -31,24 +33,26 @@
 </thead>
 <tbody>
 {% for tabelle in tabellendaten %}
-  <tr data-spiel='{{ tabelle.spiel }}' data-mail='{{ tabelle.mail }}'>
+  <tr data-spiel='{{ tabelle.spiel }}' data-mail='{{ tabelle.mail }}' class="hidden {{ tabelle.spiel }}">
 	<td>{{ tabelle.vorname }} {{ tabelle.nachname }}</td>
 	<td>
 		<div class="form-group">
-		  <input type="text" class="form-control" value="{{ tabelle.tor }}">
+		  <input type="text" class="form-control" value="{{ tabelle.tor or '0' }}" id="{{ tabelle.spiel }}-{{ tabelle.mail }}-tor">
 		</div>
 	</td>
 	<td>
 		<div class="form-group">
-		  <input type="text" class="form-control" value="{{ tabelle.assist }}">
+		  <input type="text" class="form-control" value="{{ tabelle.assist or '0' }}" id="{{ tabelle.spiel }}-{{ tabelle.mail }}-assist">
 		</div>
 	</td>
-	<td><button class="btn btn-primary">Update</button></td>
+	<td><button class="btn btn-primary" onclick="update_score('{{ tabelle.spiel }}#{{ tabelle.mail }}');">Update</button></td>
   </tr>
 {% endfor %}
 </tbody>
 </table>
+<script src="https://unpkg.com/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js"></script>
 {% endblock %}
+
 
 
 

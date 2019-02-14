@@ -29,9 +29,9 @@
 				</tr>
 			</table>
 			<h4>Teilnehmer</h4>
-			<table style="width: 100%">
+			<table style="width: 100%; cursor: pointer;">
 				{% for sp in spieler[training.name] %}
-				<tr {% if stundensperre < 1 %}onclick="busse('{{ training.name }}', '{{ sp[3] }}', '{{ sp[2] }}', this);" {% else %}onclick="change_anwesenheit('{{ training.name }}', '{{ sp[3] }}', '{{ sp[2] }}', this);" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
+				<tr id="{{ training.name }}-{{ sp[3] }}" {% if stundensperre < 1 %}onclick="busse('{{ training.name }}', '{{ sp[3] }}', '{{ sp[2] }}', this);" {% else %}onclick="change_anwesenheit('{{ training.name }}', '{{ sp[3] }}', '{{ sp[2] }}', this);" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
 					<td style="width: 10%; height: 30px;">&nbsp;<i class="fa fa-exchange"></i>{% if stundensperre < 1 %}&nbsp;<i class="fa fa-dollar"></i>{% endif %}</td>
 					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
 				</tr>

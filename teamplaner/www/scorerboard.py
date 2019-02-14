@@ -15,20 +15,46 @@ def get_context(context):
 	if "TeamPlaner Scorer" not in frappe.get_roles(frappe.session.user):
 		frappe.throw(_("You need a special role to access this page"), frappe.PermissionError)
 	context.show_sidebar=True
-	context['tabellendaten'] = frappe.db.sql("""SELECT DISTINCT
-												`spiele`.`name` AS `spiel`,
-												`mitglied_verweis`.`mail`,
-												`mitglied`.`vorname`,
-												`mitglied`.`nachname`,
-												`scorerliste`.`tor`,
-												`scorerliste`.`assist`,
-												`scorerliste`.`total`
-											FROM (((`tabTeamPlaner Spiel` AS `spiele`
-											INNER JOIN `tabTeamPlaner Spieler Verweis Anwesenheit` AS `mitglied_verweis` ON `spiele`.`name` = `mitglied_verweis`.`parent`)
-											INNER JOIN `tabTeamPlaner Mitglied` AS `mitglied` ON `mitglied`.`mail` = `mitglied_verweis`.`mail`)
-											INNER JOIN `tabTeamPlaner Scorer Liste` AS `scorerliste` ON `spiele`.`name` = `scorerliste`.`spiel`)""", as_dict=True)
+	context['top_ten'] = scorerliste()['top_ten']
+	context['tabellendaten'] = frappe.db.sql("""SELECT
+													`mitglied`.`vorname`,
+													`mitglied`.`nachname`,
+													`mitglied`.`mail`,
+													`scorerliste`.`spiel`,
+													`scorerliste`.`tor`,
+													`scorerliste`.`assist`
+												FROM (`tabTeamPlaner Mitglied` AS `mitglied`
+												INNER JOIN `tabTeamPlaner Scorer Liste` AS `scorerliste` ON `mitglied`.`name` = `scorerliste`.`parent`)""", as_dict=True)
 	context['spiele'] = []
 	for x in context['tabellendaten']:
 		if x.spiel not in context['spiele']:
 			context['spiele'].append(x.spiel)
 	return context
+	
+@frappe.whitelist()
+def update_scorer(spiel, mail, tor, assist, total):
+	parent = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{mail}'""".format(mail=mail), as_list=True)[0][0]
+	frappe.db.sql("""UPDATE `tabTeamPlaner Scorer Liste` SET `tor` = '{tor}', `assist` = '{assist}', `total` = '{total}' WHERE `parent` = '{parent}' AND `spiel` = '{spiel}'""".format(tor=int(tor), assist=int(assist), total=int(total), parent=parent, spiel=spiel), as_list=True)
+	return "OK"
+	
+def scorerliste():
+	data = {}
+	user = frappe.session.user
+	import datetime
+	jahr = str(datetime.date.today().year)
+	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	data['top_ten'] = frappe.db.sql("""SELECT
+											`mitglied`.`vorname` AS 'vorname',
+											`mitglied`.`nachname` AS 'nachname',
+											SUM(`score`.`tor`) AS 'tor',
+											SUM(`score`.`assist`) AS 'assist',
+											SUM(`score`.`total`) AS 'total'
+										FROM `tabTeamPlaner Scorer Liste` AS `score`
+										INNER JOIN `tabTeamPlaner Mitglied` AS `mitglied` ON `score`.`parent` = `mitglied`.`name`
+										WHERE
+											YEAR(`score`.`spiel`) = '2019'
+										GROUP BY `score`.`parent`
+										ORDER BY SUM(`score`.`total`) DESC LIMIT 10""".format(jahr=jahr, team=team), as_dict=True)
+	
+	return data
