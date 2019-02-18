@@ -1,0 +1,56 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Aufgebot") }}{% endblock %}
+{% block header %}<h1>{{ _("Erstellung Aufgebot") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+<div style="height: 30vh; overflow-x: hidden; overflow-y: scroll; padding-left: 25px;">
+<div id="reserve" class="row" ondrop="reserve_drop(event)" ondragover="allowDrop(event)">
+{% for spieler in alle_spieler %}
+ <div class="col-md-3 hidden-xs" draggable="true" ondragstart="drag(event)" id="{{ spieler.vorname }} {{ spieler.nachname }}">
+ <div class="card">
+  <img class="card-img" draggable="false" src="{% if spieler.bild %}{{ spieler.bild }}{% else %}/assets/teamplaner/image/img_avatar.png{% endif %}" alt="{{ spieler.vorname }} {{ spieler.nachname }}" style="height:100%">
+  <div class="card-container">
+    <p><b>{{ spieler.nachname }}</b><br>{{ spieler.position }}</p>
+  </div>
+</div> 
+</div>
+
+{% endfor %}
+</div>
+</div>
+<div id="linie1" style="min-height: 150px;" class="row"></div>
+<div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-7 five-three">
+        <div class="row">
+          <div class="col-sm-4" id="linie1" ondrop="linie1_drop(event)" ondragover="allowDrop(event)">
+		  <div class="div2">Column 1</div>
+          </div>
+          <div class="col-sm-4" id="linie2" ondrop="linie2_drop(event)" ondragover="allowDrop(event)">
+          <div class="div2">Column 2</div>
+          </div>
+          <div class="col-sm-4">
+          <div class="div2">Column 3</div>
+          </div><!-- end inner row -->
+        </div>
+      </div>
+      <div class="col-sm-5 five-two">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="div2">Column 4</div>
+          </div>
+          <div class="col-sm-6">
+          <div class="div2">Column 5</div>
+          </div>
+        </div><!-- end inner row -->
+      </div>
+    </div>​<!-- end outer row -->
+ </div>
+{% endblock %}
+
+
