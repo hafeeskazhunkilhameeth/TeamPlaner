@@ -15,9 +15,9 @@
 	<div class="form-group">
 		<label for="sel1">Spiel Auswahl</label>
 		<select class="form-control" id="spiel" onChange="show_spiel_tabelle(this)">
-			<option>Bitte Spiel auswählen</option>
+			<option value="leer">Bitte Spiel auswählen</option>
 			{% for spiel in spiele %}
-				<option>{{ spiel }}</option>
+				<option value="{{ spiel }}">{{ spiel }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -50,6 +50,7 @@
 {% endfor %}
 </tbody>
 </table>
+<button class="btn btn-primary" onclick="update_score_alle();">Sammel Update</button>
 <script src="https://unpkg.com/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js"></script>
 {% endblock %}
 

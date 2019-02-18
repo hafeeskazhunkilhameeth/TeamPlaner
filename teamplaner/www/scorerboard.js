@@ -26,7 +26,7 @@ let scorer_top_ten = new frappe.Chart( "#scorer_top_ten", { // or DOM element
       ]
     },
 
-    title: "Top 10",
+    title: "Top 10 von {{ frappe.utils.get_datetime(saisondaten.saison_von).strftime('%d.%m.%Y') }} bis {{ frappe.utils.get_datetime(saisondaten.saison_bis).strftime('%d.%m.%Y') }}",
     type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
     height: 300,
     colors: ['green', 'light-green', 'light-blue'],
@@ -74,5 +74,43 @@ function show_spiel_tabelle(spiel) {
 	var tr = document.getElementsByClassName(spiel);
 	for (i=0; i < tr.length; i++) {
 		tr[i].classList.remove("hidden");
+	}
+}
+
+function update_score_alle() {
+	var spiel = document.getElementById("spiel").value;
+	if (spiel.value == "leer") {
+		frappe.msgprint("Bitte zuerst ein Spiel auswählen");
+	} else {
+		frappe.show_message("Bitte warten");
+		var scores = [];
+		//console.log(spiel);
+		alle_tr = document.getElementsByClassName(spiel);
+		//console.log(alle_tr);
+		for (i=0; i < alle_tr.length; i++) {
+			var spieler_score = [];
+			spieler_score.push(alle_tr[i].dataset.mail);
+			spieler_score.push(parseInt(alle_tr[i].childNodes[3].childNodes[1].childNodes[1].value));
+			spieler_score.push(parseInt(alle_tr[i].childNodes[5].childNodes[1].childNodes[1].value));
+			scores.push(spieler_score);
+		}
+		//console.log(scores);
+		frappe.call({
+			method: "teamplaner.www.scorerboard.update_scorer_alle",
+			args:{
+				'spiel': spiel,
+				'spieler': scores
+			},
+			callback: function(r)
+			{
+				if (r.message == "OK") {
+					document.getElementById("spiel").value = "leer";
+					location.reload();
+				} else {
+					document.getElementById("spiel").value = "leer";
+					frappe.show_message("UUPS! - ERROR", "fa fa-times");
+				}
+			}
+		});
 	}
 }
