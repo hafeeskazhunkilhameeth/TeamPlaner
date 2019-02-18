@@ -1,7 +1,7 @@
 {% extends "templates/web.html" %}
 
 {% block title %}{{ _("Statistik") }}{% endblock %}
-{% block header %}<h1>{{ _("Teamstatistiken") }}</h1>{% endblock %}
+{% block header %}<h1>{{ _("Teamstatistiken") }}<br>{{ frappe.utils.get_datetime(saisondaten.saison_von).strftime('%d.%m.%Y') }} {{ _("bis") }} {{ frappe.utils.get_datetime(saisondaten.saison_bis).strftime('%d.%m.%Y') }}</h1>{% endblock %}
 
 {% block page_sidebar %}
 {% include "templates/pages/web_sidebar.html" %}
