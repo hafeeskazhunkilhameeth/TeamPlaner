@@ -85,7 +85,7 @@ function alle_spiele_laden() {
 	var btn = document.getElementById("show_all_btn");
 	var show = document.getElementById("accordion");
 	
-	acc.classList.add("hidden");
+	acc.parentNode.removeChild(acc);
 	btn.classList.add("hidden");
 	show.classList.remove("hidden");
 }
