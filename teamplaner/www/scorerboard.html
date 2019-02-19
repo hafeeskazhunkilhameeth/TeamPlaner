@@ -22,13 +22,13 @@
 		</select>
 	</div>
 </form>
+ <form id="resultate"></form> 
 <table class="table table-hover">
 <thead>
   <tr id="tr_header">
 	<th>Spieler</th>
 	<th>Tore</th>
 	<th>Assists</th>
-	<th>Update</th>
   </tr>
 </thead>
 <tbody>
@@ -45,12 +45,11 @@
 		  <input type="text" class="form-control" value="{{ tabelle.assist or '0' }}" id="{{ tabelle.spiel }}-{{ tabelle.mail }}-assist">
 		</div>
 	</td>
-	<td><button class="btn btn-primary" onclick="update_score('{{ tabelle.spiel }}#{{ tabelle.mail }}');">Update</button></td>
   </tr>
 {% endfor %}
 </tbody>
 </table>
-<button class="btn btn-primary" onclick="update_score_alle();">Sammel Update</button>
+<button class="btn btn-primary" onclick="update_score_alle();">Update</button>
 <script src="https://unpkg.com/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js"></script>
 {% endblock %}
 

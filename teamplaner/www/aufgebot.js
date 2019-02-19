@@ -20,13 +20,20 @@ function reserve_drop(ev) {
 
 var linie1_count = 0;
 function linie1_drop(ev) {
+  if (linie1_count > 3) { 
+	var addon = document.createElement("div");
+	addon.classList.add("div2");
+	var textnode = document.createTextNode("Water");
+	addon.appendChild(textnode);
+	document.getElementById("linie1").appendChild(addon);
+  }
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
-  document.getElementById(data).classList.remove("col-md-3");
+  document.getElementById(data).classList.remove("col-md-2");
   document.getElementById(data).classList.add("col-md-4");
   document.getElementById("linie1").appendChild(document.getElementById(data));
   linie1_count += 1;
-  if (linie1_count > 3) { frappe.msgprint("Du hast mehr als 3 Stürmer eingetragen!");}
+  
 }
 function linie2_drop(ev) {
   ev.preventDefault();

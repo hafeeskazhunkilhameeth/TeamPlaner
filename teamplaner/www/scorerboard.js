@@ -65,21 +65,105 @@ function update_score(ref) {
 }
 
 function show_spiel_tabelle(spiel) {
+	remove_all_resultate();
 	var spiel = spiel.value;
-	var alle_tr = document.getElementsByTagName("tr");
-	for (i=0; i < alle_tr.length; i++) {
-		alle_tr[i].classList.add("hidden");
-	}
-	document.getElementById("tr_header").classList.remove("hidden");
-	var tr = document.getElementsByClassName(spiel);
-	for (i=0; i < tr.length; i++) {
-		tr[i].classList.remove("hidden");
+	if (spiel != "leer") {
+		frappe.call({
+			method: "teamplaner.www.scorerboard.get_resultat",
+			args:{
+				'spiel': spiel
+			},
+			callback: function(r)
+			{
+				//console.log(r.message);
+				var resultate = r.message;
+				for (i=0; i < resultate.length; i++) {
+					var input_form = document.getElementById("resultate");
+					
+					var title = document.createElement("h4");
+					var title_txt = document.createTextNode("Spiel " + (i + 1));
+					title.appendChild(title_txt);
+					
+					var input_div = document.createElement("div");
+					input_div.classList.add("input-group");
+					
+					//heim
+					var input_span_heim = document.createElement("span");
+					input_span_heim.classList.add("input-group-addon");
+					
+					var input_span_txt = document.createTextNode(resultate[i]['heim']);
+					input_span_heim.appendChild(input_span_txt);
+					
+					var input_input_heim = document.createElement("input");
+					input_input_heim.type = "text";
+					input_input_heim.classList.add("form-control");
+					input_input_heim.id = "spiel-" + (i + 1) + "-heim";
+					input_input_heim.value = resultate[i]['score_heim'];
+					
+					//gast
+					var input_span_gast = document.createElement("span");
+					input_span_gast.classList.add("input-group-addon");
+					
+					var input_span_txt = document.createTextNode(resultate[i]['gegner']);
+					input_span_gast.appendChild(input_span_txt);
+					
+					var input_input_gast = document.createElement("input");
+					input_input_gast.type = "text";
+					input_input_gast.classList.add("form-control");
+					input_input_gast.id = "spiel-" + (i + 1) + "-gast";
+					input_input_gast.value = resultate[i]['score_gegner'];
+					
+					input_form.appendChild(title);
+					input_div.appendChild(input_span_heim);
+					input_div.appendChild(input_input_heim);
+					input_div.appendChild(input_span_gast);
+					input_div.appendChild(input_input_gast);
+					input_form.appendChild(input_div);
+					
+				}
+				var alle_tr = document.getElementsByTagName("tr");
+				for (i=0; i < alle_tr.length; i++) {
+					alle_tr[i].classList.add("hidden");
+				}
+				document.getElementById("tr_header").classList.remove("hidden");
+				var tr = document.getElementsByClassName(spiel);
+				for (i=0; i < tr.length; i++) {
+					tr[i].classList.remove("hidden");
+				}
+			}
+		});
+	} else {
+		var alle_tr = document.getElementsByTagName("tr");
+		for (i=0; i < alle_tr.length; i++) {
+			alle_tr[i].classList.add("hidden");
+		}
 	}
 }
 
 function update_score_alle() {
 	var spiel = document.getElementById("spiel").value;
-	if (spiel.value == "leer") {
+	try {
+		var spiel_eins_heim = document.getElementById("spiel-1-heim").value;
+	} catch {
+		var spiel_eins_heim = 0;
+	}
+	try {
+		var spiel_eins_gast = document.getElementById("spiel-1-gast").value;
+	} catch {
+		var spiel_eins_gast = 0;
+	}
+	try {
+		var spiel_zwei_heim = document.getElementById("spiel-2-heim").value;
+	} catch {
+		var spiel_zwei_heim = 0;
+	}
+	try {
+		var spiel_zwei_gast = document.getElementById("spiel-2-gast").value;
+	} catch {
+		var spiel_zwei_gast = 0;
+	}
+	console.log(spiel);
+	if (spiel == "leer") {
 		frappe.msgprint("Bitte zuerst ein Spiel auswählen");
 	} else {
 		frappe.show_message("Bitte warten");
@@ -99,7 +183,11 @@ function update_score_alle() {
 			method: "teamplaner.www.scorerboard.update_scorer_alle",
 			args:{
 				'spiel': spiel,
-				'spieler': scores
+				'spieler': scores,
+				'sh': spiel_eins_heim,
+				'sg': spiel_eins_gast,
+				'ssh': spiel_zwei_heim,
+				'ssg': spiel_zwei_gast
 			},
 			callback: function(r)
 			{
@@ -112,5 +200,12 @@ function update_score_alle() {
 				}
 			}
 		});
+	}
+}
+
+function remove_all_resultate() {
+	var myNode = document.getElementById("resultate");
+	while (myNode.firstChild) {
+		myNode.removeChild(myNode.firstChild);
 	}
 }

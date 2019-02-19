@@ -14,7 +14,7 @@
 		<div class="panel-heading">
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}<br>{% if training.aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
 		  </h4>
 		</div>
 		<div id="{{ training.name }}" class="panel-collapse collapse">
@@ -22,7 +22,7 @@
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 70%"><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
-					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}</td>
+					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}{% if training.zwei_aufgebot_status == 1 %}<br><a onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</a>{% endif %}</td>
 				</tr>
 			</table>
 			<h4>Teilnehmer</h4>
@@ -48,7 +48,7 @@
 		<div class="panel-heading">
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}<br>{% if training.aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
 		  </h4>
 		</div>
 		<div id="{{ training.name }}" class="panel-collapse collapse">
@@ -56,7 +56,7 @@
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 70%"><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
-					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}</td>
+					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}{% if training.zwei_aufgebot_status == 1 %}<br><a onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</a>{% endif %}</td>
 				</tr>
 			</table>
 			<h4>Teilnehmer</h4>

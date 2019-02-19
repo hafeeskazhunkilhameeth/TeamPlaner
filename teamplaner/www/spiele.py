@@ -13,7 +13,7 @@ def get_context(context):
 	if frappe.session.user=='Guest':
 		frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
 	context.show_sidebar=True
-	context['trainings'] = frappe.client.get_list('TeamPlaner Spiel', fields=['name', 'von', 'bis', 'ort', 'aufgebot_status', 'beschriftung', 'gegner'], filters=[['datum','>=',nowdate()]], order_by='name', limit_page_length=1000)
+	context['trainings'] = frappe.client.get_list('TeamPlaner Spiel', fields=['name', 'von', 'bis', 'ort', 'aufgebot_status', 'zwei_aufgebot_status', 'beschriftung', 'gegner', 'zweiter_gegner'], filters=[['datum','>=',nowdate()]], order_by='name', limit_page_length=1000)
 	context['teilnehmer'] = {}
 	context['spieler'] = {}
 	i = 1

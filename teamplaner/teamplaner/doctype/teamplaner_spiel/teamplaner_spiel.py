@@ -50,6 +50,12 @@ def load_spieler(spiel):
 				row.spielername = spieler.vorname + ' ' + spieler.nachname
 				row.position = spieler.position
 				row.linie = sp_detail.linie
+				if spiel.zwei_spiele == 1:
+					row = spiel.append('zwei_linien', {})
+					row.spielername = spieler.vorname + ' ' + spieler.nachname
+					row.position = spieler.position
+					row.linie = sp_detail.linie
+				
 		spiel.save()
 		return "OK"
 	else:

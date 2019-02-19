@@ -32,6 +32,7 @@ def get_context(context):
 	for x in context['tabellendaten']:
 		if x.spiel not in context['spiele']:
 			context['spiele'].append(x.spiel)
+	
 	return context
 	
 @frappe.whitelist()
@@ -41,7 +42,12 @@ def update_scorer(spiel, mail, tor, assist, total):
 	return "OK"
 	
 @frappe.whitelist()
-def update_scorer_alle(spiel, spieler):
+def update_scorer_alle(spiel, spieler, sh, sg, ssh, ssg):
+	#sh = spiel 1 heim
+	#sg = spiel 1 gast
+	#ssh = spiel 2 heim
+	# ssg = spiel 2 gast
+	
 	if isinstance(spieler, basestring):
 		spieler = json.loads(spieler)
 		for score in spieler:
@@ -49,6 +55,7 @@ def update_scorer_alle(spiel, spieler):
 			parent = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{mail}'""".format(mail=score[0]), as_list=True)[0][0]
 			total = int(score[1]) + int(score[2])
 			frappe.db.sql("""UPDATE `tabTeamPlaner Scorer Liste` SET `tor` = '{tor}', `assist` = '{assist}', `total` = '{total}' WHERE `parent` = '{parent}' AND `spiel` = '{spiel}'""".format(tor=int(score[1]), assist=int(score[2]), total=total, parent=parent, spiel=spiel), as_list=True)
+		update_resultat = frappe.db.sql("""UPDATE `tabTeamPlaner Spiel` SET `eins_heim` = '{sh}', `eins_gast` = '{sg}', `zwei_heim` = '{ssh}', `zwei_gast` = '{ssg}' WHERE `name` = '{spiel}'""".format(sh=sh, ssh=ssh, sg=sg, ssg=ssg, spiel=spiel), as_list=True)
 		return "OK"
 	else:
 		return "NOK"
@@ -86,3 +93,50 @@ def get_saisondaten():
 	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
 	saisondaten = frappe.db.sql("""SELECT `saison_von`, `saison_bis` FROM `tabTeamPlaner Team` WHERE `name` = '{team}'""".format(team=team), as_dict=True)
 	return saisondaten[0]
+	
+@frappe.whitelist()
+def get_resultat(spiel):
+	resultate = []
+	spiel = frappe.get_doc("TeamPlaner Spiel", spiel)
+	verein = frappe.db.sql("""SELECT `team_von_verein` FROM `tabTeamPlaner Team` WHERE `name` = '{team}'""".format(team=spiel.team), as_list=True)[0][0]
+	if not spiel.zwei_spiele == 1:
+		_resultate = {}
+		if spiel.eins_heimspiel == 1:
+			_resultate['heim'] = verein
+			_resultate['gegner'] = spiel.gegner
+			_resultate['score_heim'] = spiel.eins_heim
+			_resultate['score_gegner'] = spiel.eins_gast
+		else:
+			_resultate['heim'] = spiel.gegner
+			_resultate['gegner'] = verein
+			_resultate['score_heim'] = spiel.eins_heim
+			_resultate['score_gegner'] = spiel.eins_gast
+		resultate.append(_resultate)
+			
+	else:
+		_resultate = {}
+		if spiel.eins_heimspiel == 1:
+			_resultate['heim'] = verein
+			_resultate['gegner'] = spiel.gegner
+			_resultate['score_heim'] = spiel.eins_heim
+			_resultate['score_gegner'] = spiel.eins_gast
+		else:
+			_resultate['heim'] = spiel.gegner
+			_resultate['gegner'] = verein
+			_resultate['score_heim'] = spiel.eins_heim
+			_resultate['score_gegner'] = spiel.eins_gast
+		resultate.append(_resultate)
+		_resultate = {}
+		if spiel.zwei_heimspiel == 1:
+			_resultate['heim'] = verein
+			_resultate['gegner'] = spiel.zweiter_gegner
+			_resultate['score_heim'] = spiel.zwei_heim
+			_resultate['score_gegner'] = spiel.zwei_gast
+		else:
+			_resultate['heim'] = spiel.zweiter_gegner
+			_resultate['gegner'] = verein
+			_resultate['score_heim'] = spiel.zwei_heim
+			_resultate['score_gegner'] = spiel.zwei_gast
+		resultate.append(_resultate)
+		
+	return resultate

@@ -41,11 +41,12 @@ function change_anwesenheit(training, spieler, anmeldung, tr) {
 	}
 }
 
-function show_aufgebot(spiel) {
+function show_aufgebot(spiel, ref) {
 	frappe.call({
 		method: "teamplaner.utils.get_aufgebot",
 		args:{
-			'spiel': spiel
+			'spiel': spiel,
+			'ref': ref
 		},
 		callback: function(r)
 		{
@@ -53,7 +54,8 @@ function show_aufgebot(spiel) {
 			var linie_eins = "<center><h4>1. Linie</h4></center><table width='100%;'><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['tor'] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['eins'][0][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['eins'][0][1] + "</td></tr><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['eins'][1] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['eins'][2][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['eins'][2][1] + "</td></tr></table><hr>";
 			var linie_zwei = "<center><h4>2. Linie</h4></center><table width='100%;'><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['tor'] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['zwei'][0][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['zwei'][0][1] + "</td></tr><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['zwei'][1] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['zwei'][2][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['zwei'][2][1] + "</td></tr></table><hr>";
 			var linie_drei = "<center><h4>3. Linie</h4></center><table width='100%;'><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['tor'] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['drei'][0][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['drei'][0][1] + "</td></tr><tr><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['drei'][1] + "</td><td style='width:33%;' align='center'></td></tr><tr><td style='width:33%;' align='center'>" + team['drei'][2][0] + "</td><td style='width:33%;' align='center'></td><td style='width:33%;' align='center'>" + team['drei'][2][1] + "</td></tr></table><hr>";
-			var reserve = "<center><h4>Reserve</h4></center>"
+			var reserve = "<center><h4>Reserve</h4></center>";
+			var bemerkung = "<center><h4>Bemerkungen</h4></center><br>" + team['bemerkung'];
 			for (i=0; i < team['reserve'].length; i++) {
 				reserve = reserve + "<center>" + team['reserve'][i][0] + "</center>" + "<br>";
 			}
@@ -65,13 +67,13 @@ function show_aufgebot(spiel) {
 			kein_aufgebot = kein_aufgebot + "<hr>";
 			
 			if (team['anzahl_linien'] == '1') {
-				frappe.msgprint(linie_eins + reserve + kein_aufgebot, "Aufgebot für " + spiel);
+				frappe.msgprint(linie_eins + reserve + kein_aufgebot + bemerkung, "Aufgebot für Spiel " + ref + " vom " + spiel);
 			}
 			if (team['anzahl_linien'] == '2') {
-				frappe.msgprint(linie_eins + linie_zwei + reserve + kein_aufgebot, "Aufgebot für " + spiel);
+				frappe.msgprint(linie_eins + linie_zwei + reserve + kein_aufgebot + bemerkung, "Aufgebot für Spiel " + ref + " vom " + spiel);
 			}
 			if (team['anzahl_linien'] == '3') {
-				frappe.msgprint(linie_eins + linie_zwei + linie_drei + reserve + kein_aufgebot, "Aufgebot für " + spiel);
+				frappe.msgprint(linie_eins + linie_zwei + linie_drei + reserve + kein_aufgebot + bemerkung, "Aufgebot für Spiel " + ref + " vom " + spiel);
 			}
 			
 		}
