@@ -27,6 +27,7 @@ def get_context(context):
 	context['total_abwesend_pro_monat'] = total_pro_monat()['total_anzahl_abwesend']
 	context['top_ten'] = scorerliste()['top_ten']
 	context['saisondaten'] = saisondaten
+	context['saisonverlauf'] = get_saisonverlauf()
 
 	return context
 	
@@ -181,3 +182,112 @@ def get_saisondaten():
 	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
 	saisondaten = frappe.db.sql("""SELECT `saison_von`, `saison_bis` FROM `tabTeamPlaner Team` WHERE `name` = '{team}'""".format(team=team), as_dict=True)
 	return saisondaten[0]
+	
+def get_saisonverlauf():
+	data = []
+	user = frappe.session.user
+	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	
+	
+	saisonverlauf = frappe.db.sql("""SELECT
+										`beschriftung`,
+										`zwei_spiele`,
+										`eins_heimspiel`,
+										`zwei_heimspiel`,
+										`gegner`,
+										`zweiter_gegner`,
+										`eins_heim`,
+										`eins_gast`,
+										`zwei_heim`,
+										`zwei_gast`
+									FROM `tabTeamPlaner Spiel`
+									WHERE `team` = '{team}'
+									ORDER BY `datum` ASC""".format(team=team), as_dict=True)
+									
+	differenz = 0
+	punkte = 0
+	for x in saisonverlauf:
+		if x.zwei_spiele == 0:
+			if x.eins_heimspiel == 1:
+				spiel = {}
+				spiel['gegner'] = x.gegner
+				spiel['geschossen'] = x.eins_heim
+				spiel['bekommen'] = x.eins_gast
+				spiel['differenz'] = differenz + x.eins_heim - x.eins_gast
+				differenz = differenz + x.eins_heim - x.eins_gast
+				if x.eins_heim > x.eins_gast:
+					punkte = punkte + 2
+				if x.eins_heim == x.eins_gast:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+			else:
+				spiel = {}
+				spiel['gegner'] = x.gegner
+				spiel['geschossen'] = x.eins_gast
+				spiel['bekommen'] = x.eins_heim
+				spiel['differenz'] = differenz + x.eins_gast - x.eins_heim
+				differenz = differenz + x.eins_gast - x.eins_heim
+				if x.eins_gast > x.eins_heim:
+					punkte = punkte + 2
+				if x.eins_gast == x.eins_heim:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+		else:
+			if x.eins_heimspiel == 1:
+				spiel = {}
+				spiel['gegner'] = x.gegner
+				spiel['geschossen'] = x.eins_heim
+				spiel['bekommen'] = x.eins_gast
+				spiel['differenz'] = differenz + x.eins_heim - x.eins_gast
+				differenz = differenz + x.eins_heim - x.eins_gast
+				if x.eins_heim > x.eins_gast:
+					punkte = punkte + 2
+				if x.eins_heim == x.eins_gast:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+			else:
+				spiel = {}
+				spiel['gegner'] = x.gegner
+				spiel['geschossen'] = x.eins_gast
+				spiel['bekommen'] = x.eins_heim
+				spiel['differenz'] = differenz + x.eins_gast - x.eins_heim
+				differenz = differenz + x.eins_gast - x.eins_heim
+				if x.eins_gast > x.eins_heim:
+					punkte = punkte + 2
+				if x.eins_gast == x.eins_heim:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+			if x.zwei_heimspiel == 1:
+				spiel = {}
+				spiel['gegner'] = x.zweiter_gegner
+				spiel['geschossen'] = x.zwei_heim
+				spiel['bekommen'] = x.zwei_gast
+				spiel['differenz'] = differenz + x.zwei_heim - x.zwei_gast
+				differenz = differenz + x.zwei_heim - x.zwei_gast
+				if x.zwei_heim > x.zwei_gast:
+					punkte = punkte + 2
+				if x.zwei_heim == x.zwei_gast:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+			else:
+				spiel = {}
+				spiel['gegner'] = x.zweiter_gegner
+				spiel['geschossen'] = x.zwei_gast
+				spiel['bekommen'] = x.zwei_heim
+				spiel['differenz'] = differenz + x.zwei_gast - x.zwei_heim
+				differenz = differenz + x.zwei_gast - x.zwei_heim
+				if x.zwei_gast > x.zwei_heim:
+					punkte = punkte + 2
+				if x.zwei_gast == x.zwei_heim:
+					punkte = punkte + 1
+				spiel['punkte'] = punkte
+				data.append(spiel)
+	
+	
+	return data

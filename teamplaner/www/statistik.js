@@ -36,6 +36,52 @@ let scorer_top_ten = new frappe.Chart( "#scorer_top_ten", { // or DOM element
       formatTooltipY: d => d + '',
     }
   });
+  
+  
+ //Spielübersicht
+var xx_spiele = [];
+{% for x in saisonverlauf %}xx_spiele.push('{{ x.gegner }}');{% endfor %}
+var xx_geschossen = [];
+{% for x in saisonverlauf %}xx_geschossen.push({{ x.geschossen|int }});{% endfor %}
+var xx_bekommen = [];
+{% for x in saisonverlauf %}xx_bekommen.push({{ x.bekommen|int }});{% endfor %}
+var xx_diff = [];
+{% for x in saisonverlauf %}xx_diff.push({{ x.differenz|int }});{% endfor %}
+var xx_punkte = [];
+{% for x in saisonverlauf %}xx_punkte.push({{ x.punkte|int }});{% endfor %}
+let saisonverlauf = new frappe.Chart( "#saisonverlauf", { // or DOM element
+    data: {
+      labels: xx_spiele,
+      datasets: [
+        {
+          name: "Tore +", chartType: 'bar',
+          values: xx_geschossen
+        },
+        {
+          name: "Tore -", chartType: 'bar',
+          values: xx_bekommen
+        },
+        {
+          name: "Tor Diff.", chartType: 'line',
+          values: xx_diff
+        },
+        {
+          name: "Punkte", chartType: 'line',
+          values: xx_punkte
+        }
+      ]
+    },
+
+    title: "Saisonverlauf",
+    type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
+    height: 300,
+    colors: ['green', 'red', 'light-blue', 'light-green'],
+
+    tooltipOptions: {
+      formatTooltipX: d => (d + '').toUpperCase(),
+      formatTooltipY: d => d + '',
+    }
+  });
 /*   let scorer_top_ten = new frappe.Chart( "#scorer_top_ten", { // or DOM element
     data: {
       labels: ["Philip Buchegger", "Martin Christen", "OK", "OK", "OK"],
