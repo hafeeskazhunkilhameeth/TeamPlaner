@@ -16,6 +16,6 @@ def get_context(context):
 	#context['bussen'] = 'vor spieler'
 	#return context
 	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=frappe.session.user), as_list=True)[0][0]
-	context['bussen'] = frappe.db.sql("""SELECT `training`, `spiel`, `bemerkung`, `betrag` FROM `tabTeamPlaner Bussenverweis` WHERE `parent` = '{spieler}'""".format(spieler=spieler), as_list=True)
+	context['bussen'] = frappe.db.sql("""SELECT `training`, `spiel`, `bemerkung`, `betrag` FROM `tabTeamPlaner Bussenverweis` WHERE `parent` = '{spieler}' ORDER BY `creation` ASC""".format(spieler=spieler), as_list=True)
 	#frappe.client.get_list('TeamPlaner Bussenverweis', fields=['training', 'spiel', 'bemerkung', 'betrag'], filters=[['parent','=',spieler]], order_by='creation', limit_page_length=1000)
 	return context
