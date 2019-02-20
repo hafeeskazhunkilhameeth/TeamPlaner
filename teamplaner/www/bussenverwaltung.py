@@ -30,7 +30,8 @@ def get_spieler():
 										`mitglied`.`name`
 									FROM (`tabTeamPlaner Mitglied` AS `mitglied`
 									INNER JOIN `tabTeamplaner Team Verweis` AS `verweis` ON `mitglied`.`name` = `verweis`.`parent`)
-									WHERE `verweis`.`team` = '{team}'""".format(team=team), as_dict=True)
+									WHERE `verweis`.`team` = '{team}'
+									ORDER BY `mitglied`.`nachname` ASC""".format(team=team), as_dict=True)
 	return alle_spieler
 	
 def get_bussen():
