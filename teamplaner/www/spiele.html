@@ -11,7 +11,17 @@
 <div class="panel-group" id="accordion_kurz">
 {% for training in trainings_kurz %}
 	<div class="panel panel-default">
-		<div class="panel-heading">
+		<div class="panel-heading"
+		{% for sp in spieler[training.name] %}
+		{% if sp[3] == frappe.session.user %}
+		{% if sp[2] == 'Anwesend' %}
+		 style="background-color: lightgreen;"
+		{% else %}
+		 style="background-color: lightcoral;"
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+		>
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
 			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
@@ -45,7 +55,17 @@
 <div class="panel-group hidden" id="accordion">
 {% for training in trainings %}
 	<div class="panel panel-default">
-		<div class="panel-heading">
+		<div class="panel-heading"
+		{% for sp in spieler[training.name] %}
+		{% if sp[3] == frappe.session.user %}
+		{% if sp[2] == 'Anwesend' %}
+		 style="background-color: lightgreen;"
+		{% else %}
+		 style="background-color: lightcoral;"
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+		>
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
 			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>

@@ -12,7 +12,17 @@
 {% for training in trainings_kurz %}
 	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
 	<div class="panel panel-default">
-		<div class="panel-heading">
+		<div class="panel-heading"
+		{% for sp in spieler[training.name] %}
+		{% if sp[3] == frappe.session.user %}
+		{% if sp[2] == 'Anwesend' %}
+		 style="background-color: lightgreen;"
+		{% else %}
+		 style="background-color: lightcoral;"
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+		>
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
 			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}</a>
@@ -47,7 +57,17 @@
 {% for training in trainings %}
 	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
 	<div class="panel panel-default">
-		<div class="panel-heading">
+		<div class="panel-heading"
+		{% for sp in spieler[training.name] %}
+		{% if sp[3] == frappe.session.user %}
+		{% if sp[2] == 'Anwesend' %}
+		 style="background-color: lightgreen;"
+		{% else %}
+		 style="background-color: lightcoral;"
+		{% endif %}
+		{% endif %}
+		{% endfor %}
+		>
 		  <h4 class="panel-title">
 			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
 			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}</a>
