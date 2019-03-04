@@ -21,7 +21,7 @@ app_license = "MIT"
 # include js, css files in header of web template
 web_include_css = "/assets/teamplaner/css/teamplaner.css"
 web_include_js = "/assets/teamplaner/js/teamplaner.js"
-
+#base_template_path = "/teamplaner/templates/base.html"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 

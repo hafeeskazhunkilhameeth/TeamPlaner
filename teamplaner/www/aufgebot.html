@@ -3,9 +3,7 @@
 {% block title %}{{ _("Aufgebot") }}{% endblock %}
 {% block header %}<h1>{{ _("Erstellung Aufgebot") }}</h1>{% endblock %}
 
-{% block page_sidebar %}
-{% include "templates/pages/web_sidebar.html" %}
-{% endblock %}
+
 
 {% block page_content %}
 <div style="height: 30vh; overflow-x: hidden; overflow-y: scroll; padding-left: 25px;">
@@ -23,13 +21,23 @@
 {% endfor %}
 </div>
 </div>
-
-
-
-
-<div id="linie1" ondrop="linie1_drop(event)" ondragover="allowDrop(event)">
-<div class="div2">Column 1</div>
-</div>
+<table style="border: 1px solid black; width: 100%;">
+	<tr>
+		<td height=100 class="table-aufgebot" style="width: 33%; border: 1px solid black;" ondrop="l1d1_drop(event)" ondragover="allowDrop(event)"><div id="l1d1" class="row"></div></td>
+		<td style="width: 33%; border: 1px solid black;"></td>
+		<td class="table-aufgebot" style="width: 33%; border: 1px solid black;" ondrop="l1d2_drop(event)" ondragover="allowDrop(event)"><div id="l1d2" class="row"></div></td>
+	</tr>
+	<tr>
+		<td height=100 style="width: 33%; border: 1px solid black;"></td>
+		<td class="table-aufgebot" style="width: 33%; border: 1px solid black;" ondrop="l1c_drop(event)" ondragover="allowDrop(event)"><div id="l1c" class="row"></div></td>
+		<td style="width: 33%; border: 1px solid black;"></td>
+	</tr>
+	<tr>
+		<td class="table-aufgebot" height=100 style="width: 33%; border: 1px solid black;" ondrop="l1f1_drop(event)" ondragover="allowDrop(event)"><div id="l1f1" class="row"></div></td>
+		<td style="width: 33%; border: 1px solid black;"></td>
+		<td class="table-aufgebot" style="width: 33%; border: 1px solid black;" ondrop="l1f2_drop(event)" ondragover="allowDrop(event)"><div id="l1f2" class="row"></div></td>
+	</tr>
+</table>
 {% endblock %}
 
 

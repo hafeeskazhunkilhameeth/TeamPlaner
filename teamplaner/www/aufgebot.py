@@ -12,7 +12,8 @@ from frappe.utils.data import nowdate
 def get_context(context):
 	if frappe.session.user=='Guest':
 		frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
-	context.show_sidebar=False
+	context.show_sidebar=True
+	context.aufgebot_sidebar =True
 	context['alle_spieler'] = alle_spieler()
 	return context
 	

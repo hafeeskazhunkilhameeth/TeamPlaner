@@ -16,6 +16,8 @@ function reserve_drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
   document.getElementById("reserve").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-12");
+  document.getElementById(data).classList.add("col-md-2");
 }
 
 var linie1_count = 0;
@@ -35,8 +37,46 @@ function linie1_drop(ev) {
   linie1_count += 1;
   
 }
+function l1d1_drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  document.getElementById("l1d1").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
+}
+
+function l1d2_drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  document.getElementById("l1d2").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
+}
+function l1c_drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  document.getElementById("l1c").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
+}
+function l1f1_drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  document.getElementById("l1f1").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
+}
+function l1f2_drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  document.getElementById("l1f2").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
+}
 function linie2_drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
   document.getElementById("linie2").appendChild(document.getElementById(data));
+  document.getElementById(data).classList.remove("col-md-2");
+  document.getElementById(data).classList.add("col-md-12");
 }
