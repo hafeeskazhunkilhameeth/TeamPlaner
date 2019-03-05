@@ -7,7 +7,7 @@ from frappe import _
 from teamplaner.utils import count_teilnehmer, count_total_teilnehmer, teilnehmer_details
 from frappe.utils.data import nowdate
 
-#no_cache = 1
+no_cache = 1
 
 def get_context(context):
 	if frappe.session.user=='Guest':
@@ -79,7 +79,8 @@ def spieler_pro_monat():
 													`datum` >= '{von}'
 													AND `datum` <= '{bis}'
 													AND `team` = '{team}'
-												GROUP BY MONTH(`datum`)""".format(von=von, bis=bis, team=team), as_dict=True)
+												GROUP BY MONTH(`datum`)
+												ORDER BY `datum` ASC""".format(von=von, bis=bis, team=team), as_dict=True)
 												
 	data['anzahl_anwesend'] = frappe.db.sql("""SELECT
 													MONTH(`datum`) AS 'monat',
@@ -90,7 +91,8 @@ def spieler_pro_monat():
 													AND `datum` <= '{bis}'
 													AND `team` = '{team}'
 													AND `name` IN (SELECT `parent` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `status` = 'Anwesend' AND `mail` = '{user}')
-												GROUP BY MONTH(`datum`)""".format(von=von, bis=bis, team=team, user=user), as_dict=True)
+												GROUP BY MONTH(`datum`)
+												ORDER BY `datum` ASC""".format(von=von, bis=bis, team=team, user=user), as_dict=True)
 												
 	data['anzahl_abwesend'] = frappe.db.sql("""SELECT
 													MONTH(`datum`) AS 'monat',
@@ -101,7 +103,8 @@ def spieler_pro_monat():
 													AND `datum` <= '{bis}'
 													AND `team` = '{team}'
 													AND `name` IN (SELECT `parent` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `status` = 'Abwesend' AND `mail` = '{user}')
-												GROUP BY MONTH(`datum`)""".format(von=von, bis=bis, team=team, user=user), as_dict=True)
+												GROUP BY MONTH(`datum`)
+												ORDER BY `datum` ASC""".format(von=von, bis=bis, team=team, user=user), as_dict=True)
 	
 	return data
 	
@@ -123,7 +126,8 @@ def total_pro_monat():
 													`datum` >= '{von}'
 													AND `datum` <= '{bis}'
 													AND `team` = '{team}'
-												GROUP BY MONTH(`datum`)""".format(von=von, bis=bis, team=team), as_dict=True)
+												GROUP BY MONTH(`datum`)
+												ORDER BY `datum` ASC""".format(von=von, bis=bis, team=team), as_dict=True)
 												
 	data['total_anzahl_anwesend'] = frappe.db.sql("""SELECT
 														MONTH(`parent`) AS 'monat',
@@ -134,7 +138,8 @@ def total_pro_monat():
 													AND `parent` <= '{bis}'
 													AND `status` = 'Anwesend'
 													AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}')
-													GROUP BY MONTH(`parent`)""".format(von=von, bis=bis, team=team), as_dict=True)
+													GROUP BY MONTH(`parent`)
+													ORDER BY `parent` ASC""".format(von=von, bis=bis, team=team), as_dict=True)
 												
 	data['total_anzahl_abwesend'] = frappe.db.sql("""SELECT
 														MONTH(`parent`) AS 'monat',
@@ -145,7 +150,8 @@ def total_pro_monat():
 													AND `parent` <= '{bis}'
 													AND `status` = 'Abwesend'
 													AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}')
-													GROUP BY MONTH(`parent`)""".format(von=von, bis=bis, team=team), as_dict=True)
+													GROUP BY MONTH(`parent`)
+													ORDER BY `parent` ASC""".format(von=von, bis=bis, team=team), as_dict=True)
 	
 	return data
 	
@@ -188,6 +194,8 @@ def get_saisonverlauf():
 	user = frappe.session.user
 	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
 	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	saisondaten = get_saisondaten()
+	von = saisondaten.saison_von
 	
 	
 	saisonverlauf = frappe.db.sql("""SELECT
@@ -203,7 +211,9 @@ def get_saisonverlauf():
 										`zwei_gast`
 									FROM `tabTeamPlaner Spiel`
 									WHERE `team` = '{team}'
-									ORDER BY `datum` ASC""".format(team=team), as_dict=True)
+									AND `datum` >= '{von}'
+									AND `datum` <= '{today}'
+									ORDER BY `datum` ASC""".format(team=team, von=von, today=nowdate()), as_dict=True)
 									
 	differenz = 0
 	punkte = 0

@@ -112,6 +112,10 @@ let saisonverlauf = new frappe.Chart( "#saisonverlauf", { // or DOM element
     }
   }); */
 
+  
+//console.log({{ saisondaten['saison_von'] }});
+//console.log("hallo");
+
 // spieler präsenz all over
 let spieler_all_over_chart = new frappe.Chart( "#spieler_all_over", {
     data: {
@@ -128,8 +132,8 @@ let spieler_all_over_chart = new frappe.Chart( "#spieler_all_over", {
 	colors: ['green', 'red']
   });
 
- // spieler präsenz pro monat
- var jan = 0;
+// spieler präsenz pro monat
+var jan = 0;
 var jan_anwesend = 0;
 var jan_abwesend = 0;
 
@@ -178,42 +182,92 @@ var dez_anwesend = 0;
 var dez_abwesend = 0;
 
 
+var loop_control = true;
+var start_month = 1;
 {% for x in spieler_total_pro_monat %}
 	{% if x.monat == 1 %}
 		jan = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 1;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 2 %}
 		feb = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 2;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 3 %}
 		mar = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 3;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 4 %}
 		apr = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 4;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 5 %}
 		mai = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 5;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 6 %}
 		jun = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 6;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 7 %}
 		jul = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 7;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 8 %}
 		aug = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 8;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 9 %}
 		sept = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 9;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 10 %}
 		okt = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 10;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 11 %}
 		nov = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 11;
+			loop_control = false;
+		}
 	{% endif %}
 	{% if x.monat == 12 %}
 		dez = {{ x.anzahl }};
+		if (loop_control) {
+			start_month = 12;
+			loop_control = false;
+		}
 	{% endif %}
 {% endfor %}
 {% for x in spieler_anwesend_pro_monat %}
@@ -330,21 +384,97 @@ var dez_abwesend = 0;
 		dez_abwesend = {{ x.anzahl }};
 	{% endif %}
 {% endfor %}
+var label_data = [];
+var values_anwesend = [];
+var values_abwesend = [];
+var values_trainings = [];
+if (start_month == 1) {
+	label_data = ["Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez"];
+	values_anwesend = [jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend];
+	values_abwesend = [jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend];
+	values_trainings = [jan, feb, mar, apr, mai, jun, jul, aug, sept, okt, nov, dez];
+}
+if (start_month == 2) {
+	label_data = ["Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan"];
+	values_anwesend = [feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend];
+	values_abwesend = [feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend];
+	values_trainings = [feb, mar, apr, mai, jun, jul, aug, sept, okt, nov, dez, jan];
+}
+if (start_month == 3) {
+	label_data = ["März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb"];
+	values_anwesend = [mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend];
+	values_abwesend = [mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend];
+	values_trainings = [mar, apr, mai, jun, jul, aug, sept, okt, nov, dez, jan, feb];
+}
+if (start_month == 4) {
+	label_data = ["Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März"];
+	values_anwesend = [apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend];
+	values_abwesend = [apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend];
+	values_trainings = [apr, mai, jun, jul, aug, sept, okt, nov, dez, jan, feb, mar];
+}
+if (start_month == 5) {
+	label_data = ["Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr"];
+	values_anwesend = [mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend];
+	values_abwesend = [mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend];
+	values_trainings = [mai, jun, jul, aug, sept, okt, nov, dez, jan, feb, mar, apr];
+}
+if (start_month == 6) {
+	label_data = ["Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai"];
+	values_anwesend = [jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend];
+	values_abwesend = [jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend];
+	values_trainings = [jun, jul, aug, sept, okt, nov, dez, jan, feb, mar, apr, mai];
+}
+if (start_month == 7) {
+	label_data = ["Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun"];
+	values_anwesend = [jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend];
+	values_abwesend = [jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend];
+	values_trainings = [jul, aug, sept, okt, nov, dez, jan, feb, mar, apr, mai, jun];
+}
+if (start_month == 8) {
+	label_data = ["Aug", "Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul"];
+	values_anwesend = [aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend];
+	values_abwesend = [aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend];
+	values_trainings = [aug, sept, okt, nov, dez, jan, feb, mar, apr, mai, jun, jul];
+}
+if (start_month == 9) {
+	label_data = ["Sept", "Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug"];
+	values_anwesend = [sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend];
+	values_abwesend = [sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend];
+	values_trainings = [sept, okt, nov, dez, jan, feb, mar, apr, mai, jun, jul, aug];
+}
+if (start_month == 10) {
+	label_data = ["Okt", "Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept"];
+	values_anwesend = [okt_anwesend, nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend];
+	values_abwesend = [okt_abwesend, nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend];
+	values_trainings = [okt, nov, dez, jan, feb, mar, apr, mai, jun, jul, aug, sept];
+}
+if (start_month == 11) {
+	label_data = ["Nov", "Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt"];
+	values_anwesend = [nov_anwesend, dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend];
+	values_abwesend = [nov_abwesend, dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend];
+	values_trainings = [nov, dez, jan, feb, mar, apr, mai, jun, jul, aug, sept, okt];
+}
+if (start_month == 12) {
+	label_data = ["Dez", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov"];
+	values_anwesend = [dez_anwesend, jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend];
+	values_abwesend = [dez_abwesend, jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend];
+	values_trainings = [dez, jan, feb, mar, apr, mai, jun, jul, aug, sept, okt, nov];
+}
 let spieler_monat_chart = new frappe.Chart( "#spieler_monat", { // or DOM element
     data: {
-      labels: ["Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez"],
+      labels: label_data,
       datasets: [
         {
           name: "Anwesend", chartType: 'bar',
-          values: [jan_anwesend, feb_anwesend, mar_anwesend, apr_anwesend, mai_anwesend, jun_anwesend, jul_anwesend, aug_anwesend, sept_anwesend, okt_anwesend, nov_anwesend, dez_anwesend]
+          values: values_anwesend
         },
         {
           name: "Abwesend", chartType: 'bar',
-          values: [jan_abwesend, feb_abwesend, mar_abwesend, apr_abwesend, mai_abwesend, jun_abwesend, jul_abwesend, aug_abwesend, sept_abwesend, okt_abwesend, nov_abwesend, dez_abwesend]
+          values: values_abwesend
         },
         {
           name: "Trainings", chartType: 'line',
-          values: [jan, feb, mar, apr, mai, jun, jul, aug, sept, okt, nov, dez]
+          values: values_trainings
         }
       ]
     },
@@ -648,25 +778,100 @@ if (total_spieler_dez > 0) {
 }
 
 
+var spieler_schnitt = [];
+if (start_month == 1) {
+	tot_values_anwesend = [parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2)];
+	tot_values_trainings = [total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez)];
+}
+if (start_month == 2) {
+	tot_values_anwesend = [parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2)]
+	tot_values_trainings = [total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan)];
+}
+if (start_month == 3) {
+	tot_values_anwesend = [parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2)];
+	tot_values_trainings = [total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb)];
+}
+if (start_month == 4) {
+	tot_values_anwesend = [parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2)];
+	tot_values_trainings = [total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar)];
+}
+if (start_month == 5) {
+	tot_values_anwesend = [parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2)];
+	tot_values_trainings = [total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr)];
+}
+if (start_month == 6) {
+	tot_values_anwesend = [parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2)];
+	tot_values_trainings = [total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai)];
+}
+if (start_month == 7) {
+	tot_values_anwesend = [parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2)];
+	tot_values_trainings = [total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun)];
+}
+if (start_month == 8) {
+	tot_values_anwesend = [parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2)];
+	tot_values_trainings = [total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul)];
+}
+if (start_month == 9) {
+	tot_values_anwesend = [parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2)];
+	tot_values_trainings = [total_sept_training, total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug)];
+}
+if (start_month == 10) {
+	tot_values_anwesend = [parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2)];
+	tot_values_trainings = [total_okt_training, total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept)];
+}
+if (start_month == 11) {
+	tot_values_anwesend = [parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2)];
+	tot_values_trainings = [total_nov_training, total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_nov), parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt)];
+}
+if (start_month == 12) {
+	tot_values_anwesend = [parseFloat(total_dez_anwesend).toFixed(2), parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2)];
+	tot_values_abwesend = [parseFloat(total_dez_abwesend).toFixed(2), parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2)];
+	tot_values_trainings = [total_dez_training, total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training];
+	tot_spieler_schnitt = [parseInt(total_spieler_dez), parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov)];
+}
+
+
 let total_monat_chart = new frappe.Chart( "#total_monat", { // or DOM element
     data: {
-      labels: ["Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez"],
+      labels: label_data,
       datasets: [
         {
           name: "% Anwesend", chartType: 'bar',
-          values: [parseFloat(total_jan_anwesend).toFixed(2), parseFloat(total_feb_anwesend).toFixed(2), parseFloat(total_mar_anwesend).toFixed(2), parseFloat(total_apr_anwesend).toFixed(2), parseFloat(total_mai_anwesend).toFixed(2), parseFloat(total_jun_anwesend).toFixed(2), parseFloat(total_jul_anwesend).toFixed(2), parseFloat(total_aug_anwesend).toFixed(2), parseFloat(total_sept_anwesend).toFixed(2), parseFloat(total_okt_anwesend).toFixed(2), parseFloat(total_nov_anwesend).toFixed(2), parseFloat(total_dez_anwesend).toFixed(2)]
+          values: tot_values_anwesend
         },
         {
           name: "% Abwesend", chartType: 'bar',
-          values: [parseFloat(total_jan_abwesend).toFixed(2), parseFloat(total_feb_abwesend).toFixed(2), parseFloat(total_mar_abwesend).toFixed(2), parseFloat(total_apr_abwesend).toFixed(2), parseFloat(total_mai_abwesend).toFixed(2), parseFloat(total_jun_abwesend).toFixed(2), parseFloat(total_jul_abwesend).toFixed(2), parseFloat(total_aug_abwesend).toFixed(2), parseFloat(total_sept_abwesend).toFixed(2), parseFloat(total_okt_abwesend).toFixed(2), parseFloat(total_nov_abwesend).toFixed(2), parseFloat(total_dez_abwesend).toFixed(2)]
+          values: tot_values_abwesend
         },
         {
           name: "Spieler im Ø", chartType: 'line',
-          values: [parseInt(total_spieler_jan), parseInt(total_spieler_feb), parseInt(total_spieler_mar), parseInt(total_spieler_apr), parseInt(total_spieler_mai), parseInt(total_spieler_jun), parseInt(total_spieler_jul), parseInt(total_spieler_aug), parseInt(total_spieler_sept), parseInt(total_spieler_okt), parseInt(total_spieler_nov), parseInt(total_spieler_dez)]
+          values: tot_spieler_schnitt
         },
         {
           name: "Trainings", chartType: 'line',
-          values: [total_jan_training, total_feb_training, total_mar_training, total_apr_training, total_mai_training, total_jun_training, total_jul_training, total_aug_training, total_sept_training, total_okt_training, total_nov_training, total_dez_training]
+          values: tot_values_trainings
         }
       ]
     },
