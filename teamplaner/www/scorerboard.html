@@ -17,7 +17,7 @@
 		<select class="form-control" id="spiel" onChange="show_spiel_tabelle(this)">
 			<option value="leer">Bitte Spiel auswählen</option>
 			{% for spiel in spiele %}
-				<option value="{{ spiel }}">{{ spiel }}</option>
+				<option value="{{ spiel }}">{{ frappe.utils.get_datetime(spiel).strftime('%d.%m.%Y') }}</option>
 			{% endfor %}
 		</select>
 	</div>

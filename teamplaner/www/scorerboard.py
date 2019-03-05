@@ -28,7 +28,7 @@ def get_context(context):
 													`scorerliste`.`assist`
 												FROM (`tabTeamPlaner Mitglied` AS `mitglied`
 												INNER JOIN `tabTeamPlaner Scorer Liste` AS `scorerliste` ON `mitglied`.`name` = `scorerliste`.`parent`)
-												ORDER BY `scorerliste`.`spiel` DESC LIMIT 50""", as_dict=True)
+												ORDER BY `scorerliste`.`spiel` DESC""", as_dict=True)
 	context['spiele'] = []
 	for x in context['tabellendaten']:
 		if x.spiel not in context['spiele']:
