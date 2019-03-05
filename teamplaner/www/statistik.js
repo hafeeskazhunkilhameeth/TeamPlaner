@@ -131,6 +131,24 @@ let spieler_all_over_chart = new frappe.Chart( "#spieler_all_over", {
     type: 'percentage',
 	colors: ['green', 'red']
   });
+  
+  {% for spieler in presenz_alle_spieler %}
+	  {% set ref = spieler.details.name | replace("-", "") %}
+  let spieler_all_over_chart_{{ ref }} = new frappe.Chart( "#{{ ref }}", {
+    data: {
+      labels: ["Anwesend", "Abwesend"],
+      datasets: [
+        {
+          values: [parseInt({{ spieler.anwesend }}), parseInt({{ spieler.abwesend }})]
+        }
+      ],
+
+    },
+    title: "{{ spieler.details.vorname }} {{ spieler.details.nachname }}",
+    type: 'percentage',
+	colors: ['green', 'red']
+  });
+  {% endfor %}
 
 // spieler präsenz pro monat
 var jan = 0;

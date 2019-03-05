@@ -19,6 +19,7 @@ def get_context(context):
 	saisondaten = get_saisondaten()
 	context['spieler_total_anwesend'] = spieler_all_over(spieler, team)['anwesend']
 	context['spieler_total_abwesend'] = spieler_all_over(spieler, team)['abwesend']
+	context['presenz_alle_spieler'] = alle_spieler_all_over(team)
 	context['spieler_total_pro_monat'] = spieler_pro_monat()['anzahl_trainings']
 	context['spieler_anwesend_pro_monat'] = spieler_pro_monat()['anzahl_anwesend']
 	context['spieler_abwesend_pro_monat'] = spieler_pro_monat()['anzahl_abwesend']
@@ -55,6 +56,50 @@ def spieler_all_over(spieler, team):
 			AND `mail` = '{user}'
 			AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}' AND `datum` >= '{von}' AND `datum` <= '{bis}')""".format(user=user, team=team, von=von, bis=bis), as_list=True)[0][0]
 	
+	return data
+	
+def alle_spieler_all_over(team):
+	data = []
+	user = frappe.session.user
+	# import datetime
+	# jahr = datetime.date.today().year
+	saisondaten = get_saisondaten()
+	von = saisondaten.saison_von #str(jahr) + "-01-01"
+	bis = saisondaten.saison_bis #str(jahr) + "-12-31"
+	# spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+	# team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	alle_spieler = frappe.db.sql("""SELECT
+										`mitglied`.`vorname`,
+										`mitglied`.`nachname`,
+										`mitglied`.`mail`,
+										`mitglied`.`name`
+									FROM (`tabTeamPlaner Mitglied` AS `mitglied`
+									INNER JOIN `tabTeamplaner Team Verweis` AS `verweis` ON `mitglied`.`name` = `verweis`.`parent`)
+									WHERE `verweis`.`team` = '{team}'""".format(team=team), as_dict=True)
+									
+	for spieler in alle_spieler:
+		_data = {}
+		_data['details'] = {
+			'vorname': spieler.vorname,
+			'nachname': spieler.nachname,
+			'mail': spieler.mail,
+			'name': spieler.name
+		}
+		_data['anwesend'] = frappe.db.sql("""
+			SELECT COUNT(`name`)  FROM `tabTeamPlaner Spieler Verweis Anwesenheit`
+			WHERE
+				`status` = 'Anwesend'
+				AND `mail` = '{user}'
+				AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}' AND `datum` >= '{von}' AND `datum` <= '{bis}')""".format(user=spieler.mail, team=team, von=von, bis=bis), as_list=True)[0][0]
+				
+		_data['abwesend'] = frappe.db.sql("""
+			SELECT COUNT(`name`)  FROM `tabTeamPlaner Spieler Verweis Anwesenheit`
+			WHERE
+				`status` = 'Abwesend'
+				AND `mail` = '{user}'
+				AND `parent` IN (SELECT `name` FROM `tabTeamPlaner Training` WHERE `team` = '{team}' AND `datum` >= '{von}' AND `datum` <= '{bis}')""".format(user=spieler.mail, team=team, von=von, bis=bis), as_list=True)[0][0]
+		data.append(_data)
+		
 	return data
 	
 def spieler_pro_monat():

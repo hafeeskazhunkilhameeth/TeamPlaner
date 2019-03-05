@@ -27,6 +27,12 @@
 <div class="col-xs-12">
 <div id="total_monat"></div>
 </div>
+{% for spieler in presenz_alle_spieler %}
+{% set ref = spieler.details.name | replace("-", "") %}
+<div class="col-xs-12">
+<div id="{{ ref }}"></div>
+</div>
+{% endfor %}
 <script src="https://unpkg.com/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js"></script>
 {% endblock %}
 
