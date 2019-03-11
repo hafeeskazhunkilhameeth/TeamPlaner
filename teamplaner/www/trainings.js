@@ -48,3 +48,26 @@ function alle_trainings_laden() {
 	btn.classList.add("hidden");
 	show.classList.remove("hidden");
 }
+
+function add_bemerkung(training) {
+	frappe.msgprint('<div class="input-group"><span class="input-group-addon"><i class="fa fa-comment"></i></span><input id="bemerkung" type="text" class="form-control" name="bemerkung" placeholder="Bemerkung"></div><br><button type="button" class="btn btn-primary btn-block" id="' + training + '" onclick="update_bemerkung(this);">Update</button>', "Erfassung Bemerkung");	
+}
+
+function update_bemerkung(training) {
+	var bemerkung = document.getElementById("bemerkung").value;
+	console.log(training.id);
+	console.log(bemerkung);
+	console.log(frappe.session.user);
+	frappe.call({
+		method: "teamplaner.utils.update_remark",
+		args:{
+			'training': training.id,
+			'spieler': frappe.session.user,
+			'bemerkung': bemerkung
+		},
+		callback: function(r)
+		{
+			window.location.reload();
+		}
+	});
+}

@@ -13,7 +13,7 @@ def count_total_teilnehmer(training, doctype):
 	return frappe.db.sql("""SELECT COUNT(`name`) FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)[0][0]
 	
 def teilnehmer_details(training, doctype):
-	return frappe.db.sql("""SELECT `vorname`, `nachname`, `status`, `mail` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)
+	return frappe.db.sql("""SELECT `vorname`, `nachname`, `status`, `mail`, `bemerkung` FROM `tabTeamPlaner Spieler Verweis Anwesenheit` WHERE `parent` = '{training}' AND `parenttype` = '{doctype}'""".format(training=training, doctype=doctype), as_list=True)
 	
 @frappe.whitelist()
 def change_anwesenheit(training, spieler, status, busse="keine"):
@@ -132,3 +132,8 @@ def get_aufgebot(spiel, ref):
 			'bemerkung': bemerkung or 'Keine'
 		}
 		return team
+		
+@frappe.whitelist()
+def update_remark(spieler, training, bemerkung):
+	frappe.db.sql("""UPDATE `tabTeamPlaner Spieler Verweis Anwesenheit` SET `bemerkung` = '{bemerkung}' WHERE `parent` = '{training}' AND `parenttype` = 'TeamPlaner Training' AND `mail` = '{spieler}'""".format(training=training, spieler=spieler, bemerkung=bemerkung), as_list=True)
+	return "ok"
