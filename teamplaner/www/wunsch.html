@@ -1,0 +1,82 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Block Wunschliste") }}{% endblock %}
+{% block header %}<h1>{{ _("Block Wunschliste") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-6 col-xs-12">
+		<div class="form-group">
+			<label for="dl">Defense Links:</label>
+			<select class="form-control" id="dl">
+				<option>Bitte Defense Links auswählen</option>
+			{% for s in spieler %}
+				<option>{{ s }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6 col-xs-12">
+		<div class="form-group">
+			<label for="dr">Defense Rechts:</label>
+			<select class="form-control" id="dr">
+				<option>Bitte Defense Rechts auswählen</option>
+			{% for s in spieler %}
+				<option>{{ s }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-3 hidden-xs"></div>
+	<div class="col-sm-6 col-xs-12">
+		<div class="form-group">
+			<label for="c">Center/Top:</label>
+			<select class="form-control" id="c">
+				<option>Bitte Center/Top auswählen</option>
+			{% for s in spieler %}
+				<option>{{ s }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-3 hidden-xs"></div>
+</div>
+<div class="row">
+	<div class="col-sm-6 col-xs-12">
+		<div class="form-group">
+			<label for="ol">Offense Links:</label>
+			<select class="form-control" id="ol">
+				<option>Bitte Offense Links auswählen</option>
+			{% for s in spieler %}
+				<option>{{ s }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-6 col-xs-12">
+		<div class="form-group">
+			<label for="or">Offense Rechts:</label>
+			<select class="form-control" id="or">
+				<option>Bitte Offense Rechts auswählen</option>
+			{% for s in spieler %}
+				<option>{{ s }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+</div>
+<div class="form-group">
+	<label for="comment">Bemerkung:</label>
+	<textarea class="form-control" rows="5" id="comment"></textarea>
+</div>
+<button class="btn btn-primary" onclick="wunsch_speichern()">Wunsch Block speichern</button>
+{% endblock %}
+
+
+

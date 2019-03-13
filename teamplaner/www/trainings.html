@@ -88,6 +88,9 @@
 				<tr>
 					<td><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
 				</tr>
+				<tr>
+					<td onclick="add_bemerkung('{{ training.name }}');"><i class="fa fa-comment"></i> Bemerkung erfassen</td>
+				</tr>
 			</table>
 			<h4>Teilnehmer</h4>
 			<table style="width: 100%">
