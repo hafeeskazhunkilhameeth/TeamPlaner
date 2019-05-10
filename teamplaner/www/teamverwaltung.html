@@ -1,0 +1,36 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Team Verwaltung") }}{% endblock %}
+{% block header %}<h1>{{ _("Team Verwaltung") }}</h1>{% endblock %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+
+{% block page_content %}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#team">Das Team</a></li>
+	<li><a data-toggle="tab" href="#trainings">Die Trainings</a></li>
+	<li><a data-toggle="tab" href="#spiele">Die Spiele</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id="team" class="tab-pane fade in active">
+		<h3>Das Team</h3>
+		<button class="btn" style="width: 200px;"><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</button><br><br>
+		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spieler bearbeiten</button>
+	</div>
+	<div id="trainings" class="tab-pane fade">
+		<h3>Die Trainings</h3>
+		<button class="btn" style="width: 200px;"><i class="fa fa-plus"></i> Neues Training hinzufügen</button><br><br>
+		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Training bearbeiten</button>
+	</div>
+	<div id="spiele" class="tab-pane fade">
+		<h3>Die Spiele</h3>
+		<button class="btn" style="width: 200px;"><i class="fa fa-plus"></i> Neues Spiel hinzufügen</button><br><br>
+		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spiele bearbeiten</button>
+	</div>
+</div>
+
+{% endblock %}

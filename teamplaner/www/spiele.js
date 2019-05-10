@@ -1,6 +1,6 @@
-function change_anwesenheit(training, spieler, anmeldung, tr) {	
+function change_anwesenheit(training, spieler, anmeldung, btn) {	
 	//frappe.msgprint(spieler);
-	if (tr.style.backgroundColor == "red") {
+	/* if (tr.style.backgroundColor == "red") {
 				frappe.call({
 			method: "teamplaner.utils.change_anwesenheit",
 			args:{
@@ -38,6 +38,36 @@ function change_anwesenheit(training, spieler, anmeldung, tr) {
 			}
 		});
 
+	} */
+	
+	if (btn.checked == true) {
+		frappe.call({
+			method: "teamplaner.utils.change_anwesenheit",
+			args:{
+				'training': training,
+				'spieler': spieler,
+				'status': "Abwesend"
+			},
+			callback: function(r)
+			{
+				var elternElement = document.getElementById(training);
+				elternElement.previousSibling.previousSibling.style.backgroundColor = "lightgreen";
+			}
+		});
+	} else {
+		frappe.call({
+			method: "teamplaner.utils.change_anwesenheit",
+			args:{
+				'training': training,
+				'spieler': spieler,
+				'status': "Anwesend"
+			},
+			callback: function(r)
+			{
+				var elternElement = document.getElementById(training);
+				elternElement.previousSibling.previousSibling.style.backgroundColor = "lightcoral";
+			}
+		});
 	}
 }
 

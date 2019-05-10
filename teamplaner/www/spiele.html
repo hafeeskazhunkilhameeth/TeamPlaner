@@ -10,6 +10,7 @@
 {% block page_content %}
 <div class="panel-group" id="accordion_kurz">
 {% for training in trainings_kurz %}
+	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
 	<div class="panel panel-default">
 		<div class="panel-heading"
 		{% for sp in spieler[training.name] %}
@@ -23,23 +24,49 @@
 		{% endfor %}
 		>
 		  <h4 class="panel-title">
-			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
+			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}"><center>
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}<br>{{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</center></a>
 		  </h4>
 		</div>
 		<div id="{{ training.name }}" class="panel-collapse collapse">
 		  <div class="panel-body">
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 70%"><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
-					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}{% if training.zwei_aufgebot_status == 1 %}<br><a onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</a>{% endif %}</td>
-				</tr>
-			</table>
-			<h4>Teilnehmer</h4>
+			<div><center>
+			{% for sp in spieler[training.name] %}
+				{% if sp[3] == frappe.session.user %}
+					{% if sp[2] == 'Anwesend' %}
+						<label class="switch">
+						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <span class="slider round"></span>
+						</label>
+						{% if stundensperre <= 1 %}
+							<br>Die Anmeldefrist ist abgelaufen
+						{% else %}
+							<br>An-/Abmeldung
+						{% endif %}
+					{% else %}
+						<label class="switch">
+						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <span class="slider round"></span>
+						</label>
+						{% if stundensperre <= 1 %}
+							<br>Die Anmeldefrist ist abgelaufen
+						{% else %}
+							<br>An-/Abmeldung
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			</center></div><br><br>
+			<div><center>
+				<i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}<br>
+				{% if training.aufgebot_status == 1 %}<button type="button" class="btn btn-info" onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 1</button>{% endif %}
+				{% if training.zwei_aufgebot_status == 1 %}<button type="button" class="btn btn-info" onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</button>{% endif %}
+			</center></div><br>
+			<h4>Teilnehmer Übersicht</h4>
 			<table style="width: 100%">
 				{% for sp in spieler[training.name] %}
-				<tr {% if sp[3] == frappe.session.user %}onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}{% if sp[3] == frappe.session.user %} border: dotted;{% endif %}">
-					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
+				<tr style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
+					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}</td>
 					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
 				</tr>
 				{% endfor %}
@@ -54,6 +81,7 @@
 
 <div class="panel-group hidden" id="accordion">
 {% for training in trainings %}
+	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
 	<div class="panel panel-default">
 		<div class="panel-heading"
 		{% for sp in spieler[training.name] %}
@@ -67,23 +95,49 @@
 		{% endfor %}
 		>
 		  <h4 class="panel-title">
-			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
+			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}"><center>
+			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}<br>{{ training.gegner }}{% if training.zweiter_gegner %}/{{ training.zweiter_gegner }}{% endif %}<br>{% if training.aufgebot_status == 1 or training.zwei_aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</center></a>
 		  </h4>
 		</div>
 		<div id="{{ training.name }}" class="panel-collapse collapse">
 		  <div class="panel-body">
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 70%"><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
-					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}{% if training.zwei_aufgebot_status == 1 %}<br><a onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</a>{% endif %}</td>
-				</tr>
-			</table>
-			<h4>Teilnehmer</h4>
+			<div><center>
+			{% for sp in spieler[training.name] %}
+				{% if sp[3] == frappe.session.user %}
+					{% if sp[2] == 'Anwesend' %}
+						<label class="switch">
+						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <span class="slider round"></span>
+						</label>
+						{% if stundensperre <= 1 %}
+							<br>Die Anmeldefrist ist abgelaufen
+						{% else %}
+							<br>An-/Abmeldung
+						{% endif %}
+					{% else %}
+						<label class="switch">
+						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <span class="slider round"></span>
+						</label>
+						{% if stundensperre <= 1 %}
+							<br>Die Anmeldefrist ist abgelaufen
+						{% else %}
+							<br>An-/Abmeldung
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			</center></div><br><br>
+			<div><center>
+				<i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}<br>
+				{% if training.aufgebot_status == 1 %}<button type="button" class="btn btn-info" onclick="show_aufgebot('{{ training.name }}', '1')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 1</button>{% endif %}
+				{% if training.zwei_aufgebot_status == 1 %}<button type="button" class="btn btn-info" onclick="show_aufgebot('{{ training.name }}', '2')"><i class="fa fa-cloud-download"></i> Aufgebot Spiel 2</button>{% endif %}
+			</center></div><br>
+			<h4>Teilnehmer Übersicht</h4>
 			<table style="width: 100%">
 				{% for sp in spieler[training.name] %}
-				<tr {% if sp[3] == frappe.session.user %}onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}{% if sp[3] == frappe.session.user %} border: dotted;{% endif %}">
-					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
+				<tr style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
+					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}</td>
 					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
 				</tr>
 				{% endfor %}
