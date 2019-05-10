@@ -17,9 +17,45 @@
 
 <div class="tab-content">
 	<div id="team" class="tab-pane fade in active">
-		<h3>Das Team</h3>
-		<button class="btn" style="width: 200px;"><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</button><br><br>
-		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spieler bearbeiten</button>
+		<div id="team_section">
+			<h3>Das Team</h3>
+			<button class="btn" style="width: 200px;" onclick="show_neuer_spieler();"><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</button><br><br>
+			<button class="btn" style="width: 200px;" onclick="show_spieler_bearbeiten();"><i class="fa fa-edit"></i> Spieler bearbeiten</button>
+		</div>
+		<div id="neuer_spieler" style="display: none;">
+			<h3><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</h3>
+			<div class="form-group">
+				<label for="vorname">Vorname:</label>
+				<input type="text" class="form-control" id="vorname">
+				<label for="vorname">Nachname:</label>
+				<input type="text" class="form-control" id="nachname">
+				<label for="mail">E-Mail:</label>
+				<input type="text" class="form-control" id="mail">
+				<label for="lizenznummer">Lizenznummer:</label>
+				<input type="text" class="form-control" id="lizenznummer">
+				<label for="nummer">Rückennummer:</label>
+				<input type="text" class="form-control" id="nummer">
+				<label for="position">Position:</label>
+				<select class="form-control" id="position">
+					<option>Torwart</option>
+					<option>Verteidiger</option>
+					<option>Center / Top</option>
+					<option>Flügel</option>
+				</select>
+				<label for="linie">Stamm-Linie:</label>
+				<select class="form-control" id="linie">
+					<option>1.</option>
+					<option>2.</option>
+					<option>3.</option>
+					<option>Reserve</option>
+				</select>
+			</div>
+			<button class="btn"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn" onclick="reset_tab_team();"><i class="fa fa-close"></i> Schliessen</button>
+		</div>
+		<div id="spieler_bearbeiten" style="display: none;">
+			<h3><i class="fa fa-edit"></i> Spieler bearbeiten</h3>
+		</div>
 	</div>
 	<div id="trainings" class="tab-pane fade">
 		<h3>Die Trainings</h3>
@@ -29,7 +65,7 @@
 	<div id="spiele" class="tab-pane fade">
 		<h3>Die Spiele</h3>
 		<button class="btn" style="width: 200px;"><i class="fa fa-plus"></i> Neues Spiel hinzufügen</button><br><br>
-		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spiele bearbeiten</button>
+		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spiel bearbeiten</button>
 	</div>
 </div>
 
