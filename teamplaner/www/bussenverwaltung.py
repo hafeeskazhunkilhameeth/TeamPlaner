@@ -21,8 +21,11 @@ def get_context(context):
 	
 def get_spieler():
 	user = frappe.session.user
-	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
-	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	if "TeamPlaner Spieler" not in frappe.get_roles(frappe.session.user):
+		team = 'Herren 2'
+	else:
+		spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+		team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
 	
 	alle_spieler = frappe.db.sql("""SELECT
 										`mitglied`.`vorname`,

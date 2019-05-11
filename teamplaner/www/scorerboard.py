@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
@@ -69,8 +70,11 @@ def scorerliste():
 	saisondaten = get_saisondaten()
 	von = saisondaten.saison_von
 	bis = saisondaten.saison_bis
-	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
-	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	if "TeamPlaner Spieler" not in frappe.get_roles(frappe.session.user):
+		team = 'Herren 2'
+	else:
+		spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+		team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
 	data['top_ten'] = frappe.db.sql("""SELECT
 											`mitglied`.`vorname` AS 'vorname',
 											`mitglied`.`nachname` AS 'nachname',
@@ -90,8 +94,11 @@ def scorerliste():
 def get_saisondaten():
 	data = {}
 	user = frappe.session.user
-	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
-	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	if "TeamPlaner Spieler" not in frappe.get_roles(frappe.session.user):
+		team = 'Herren 2'
+	else:
+		spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+		team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0] or 'Herren 2'
 	saisondaten = frappe.db.sql("""SELECT `saison_von`, `saison_bis` FROM `tabTeamPlaner Team` WHERE `name` = '{team}'""".format(team=team), as_dict=True)
 	return saisondaten[0]
 	
