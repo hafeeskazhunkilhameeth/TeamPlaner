@@ -10,17 +10,17 @@
 {% block page_content %}
 
 <ul class="nav nav-tabs">
-	<li class="active"><a data-toggle="tab" href="#team">Das Team</a></li>
-	<li><a data-toggle="tab" href="#trainings">Die Trainings</a></li>
-	<li><a data-toggle="tab" href="#spiele">Die Spiele</a></li>
+	<li class="active"><a data-toggle="tab" href="#team">Team</a></li>
+	<li><a data-toggle="tab" href="#trainings">Trainings</a></li>
+	<li><a data-toggle="tab" href="#spiele">Spiele</a></li>
 </ul>
 
 <div class="tab-content">
 	<div id="team" class="tab-pane fade in active">
 		<div id="team_section">
 			<h3>Das Team</h3>
-			<button class="btn" style="width: 200px;" onclick="show_neuer_spieler();"><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</button><br><br>
-			<button class="btn" style="width: 200px;" onclick="show_spieler_bearbeiten();"><i class="fa fa-edit"></i> Spieler bearbeiten</button>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_neuer_spieler();"><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</button><br><br>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_spieler_bearbeiten();"><i class="fa fa-edit"></i> Spieler bearbeiten</button>
 		</div>
 		<div id="neuer_spieler" style="display: none;">
 			<h3><i class="fa fa-user-plus"></i> Neuer Spieler hinzufügen</h3>
@@ -50,22 +50,98 @@
 					<option>Reserve</option>
 				</select>
 			</div>
-			<button class="btn"><i class="fa fa-folder"></i> Speichern</button>
-			<button class="btn" onclick="reset_tab_team();"><i class="fa fa-close"></i> Schliessen</button>
+			<button class="btn btn-primary" onclick="add_spieler();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-primary" onclick="reset_tab_team();"><i class="fa fa-close"></i> Schliessen</button>
 		</div>
 		<div id="spieler_bearbeiten" style="display: none;">
 			<h3><i class="fa fa-edit"></i> Spieler bearbeiten</h3>
+			<div class="form-group">
+				<label for="spieler">Spieler:</label>
+				<select class="form-control" id="spieler">
+					<option>Bitte wähle einen Spieler aus</option>
+					<option>2.</option>
+					<option>3.</option>
+					<option>Reserve</option>
+				</select>
+			</div>
+			<button class="btn btn-primary" onclick="change_spiel();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-warning" onclick="delete_spieler();"><i class="fa fa-trash"></i> Löschen</button>
+			<button class="btn btn-primary" onclick="reset_tab_team();"><i class="fa fa-close"></i> Schliessen</button>
 		</div>
 	</div>
 	<div id="trainings" class="tab-pane fade">
-		<h3>Die Trainings</h3>
-		<button class="btn" style="width: 200px;"><i class="fa fa-plus"></i> Neues Training hinzufügen</button><br><br>
-		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Training bearbeiten</button>
+		<div id="training_section">
+			<h3>Die Trainings</h3>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_neues_training();"><i class="fa fa-plus"></i> Neues Training hinzufügen</button><br><br>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_training_bearbeiten();"><i class="fa fa-edit"></i> Training bearbeiten</button>
+		</div>
+		<div id="neues_training" style="display: none;">
+			<h3><i class="fa fa-user-plus"></i> Neues Training hinzufügen</h3>
+			<div class="form-group">
+				<label for="wann">Wann:</label>
+				<input type="date" class="form-control" id="wann">
+				<label for="wo">Wo:</label>
+				<input type="text" class="form-control" id="wo">
+				<label for="von">Von:</label>
+				<input type="time" class="form-control" id="von">
+				<label for="bis">Bis:</label>
+				<input type="time" class="form-control" id="bis">
+			</div>
+			<button class="btn btn-primary" onclick="add_training();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-primary" onclick="reset_tab_training();"><i class="fa fa-close"></i> Schliessen</button>
+		</div>
+		<div id="training_bearbeiten" style="display: none;">
+			<h3><i class="fa fa-edit"></i> Training bearbeiten</h3>
+			<div class="form-group">
+				<label for="training">Training:</label>
+				<select class="form-control" id="training">
+					<option>Bitte wähle ein Training aus</option>
+					<option>2.</option>
+					<option>3.</option>
+					<option>Reserve</option>
+				</select>
+			</div>
+			<button class="btn btn-primary" onclick="change_training();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-warning" onclick="delete_training();"><i class="fa fa-trash"></i> Löschen</button>
+			<button class="btn btn-primary" onclick="reset_tab_training();"><i class="fa fa-close"></i> Schliessen</button>
+		</div>
 	</div>
 	<div id="spiele" class="tab-pane fade">
-		<h3>Die Spiele</h3>
-		<button class="btn" style="width: 200px;"><i class="fa fa-plus"></i> Neues Spiel hinzufügen</button><br><br>
-		<button class="btn" style="width: 200px;"><i class="fa fa-edit"></i> Spiel bearbeiten</button>
+		<div id="spiel_section">
+			<h3>Die Spiele</h3>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_neues_spiel();"><i class="fa fa-plus"></i> Neues Spiel hinzufügen</button><br><br>
+			<button class="btn btn-primary" style="width: 200px;" onclick="show_spiel_bearbeiten();"><i class="fa fa-edit"></i> Spiel bearbeiten</button>
+		</div>
+		<div id="neues_spiel" style="display: none;">
+			<h3><i class="fa fa-user-plus"></i> Neues Spiel hinzufügen</h3>
+			<div class="form-group">
+				<label for="spiel_wann">Wann:</label>
+				<input type="date" class="form-control" id="spiel_wann">
+				<label for="spiel_wo">Wo:</label>
+				<input type="text" class="form-control" id="spiel_wo">
+				<label for="spiel_von">Von:</label>
+				<input type="time" class="form-control" id="spiel_von">
+				<label for="spiel_bis">Bis:</label>
+				<input type="time" class="form-control" id="spiel_bis">
+			</div>
+			<button class="btn btn-primary" onclick="add_spiel();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-primary" onclick="reset_tab_spiel();"><i class="fa fa-close"></i> Schliessen</button>
+		</div>
+		<div id="spiel_bearbeiten" style="display: none;">
+			<h3><i class="fa fa-edit"></i> Spiel bearbeiten</h3>
+			<div class="form-group">
+				<label for="spiel">Spiel:</label>
+				<select class="form-control" id="spiel">
+					<option>Bitte wähle ein Spiel aus</option>
+					<option>2.</option>
+					<option>3.</option>
+					<option>Reserve</option>
+				</select>
+			</div>
+			<button class="btn btn-primary" onclick="change_spiel();"><i class="fa fa-folder"></i> Speichern</button>
+			<button class="btn btn-warning" onclick="delete_spiel();"><i class="fa fa-trash"></i> Löschen</button>
+			<button class="btn btn-primary" onclick="reset_tab_spiel();"><i class="fa fa-close"></i> Schliessen</button>
+		</div>
 	</div>
 </div>
 
