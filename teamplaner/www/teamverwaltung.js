@@ -47,7 +47,28 @@ function reset_tab_spiel() {
 }
 
 function add_spieler() {
-	
+	var vorname = document.getElementById("vorname").value;
+	var nachname = document.getElementById("nachname").value;
+	var mail = document.getElementById("mail").value;
+	var lizenznummer = document.getElementById("lizenznummer").value;
+	var nummer = document.getElementById("nummer").value;
+	var position = document.getElementById("position").value;
+	var linie = document.getElementById("linie").value;
+	frappe.call({
+		'method': "teamplaner.www.teamverwaltung.neuer_spieler",
+		'args': {
+			'vorname': vorname,
+			'nachname': nachname,
+			'mail': mail,
+			'lizenznummer': lizenznummer,
+			'nummer': nummer,
+			'position': position,
+			'linie': linie
+		},
+		'callback': function(r) {
+			frappe.msgprint("Es wurde erfolgreich ein neuer Spieler angelegt.");
+		}
+	});
 }
 
 function add_training() {
