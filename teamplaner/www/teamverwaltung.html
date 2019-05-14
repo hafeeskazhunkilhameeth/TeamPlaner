@@ -27,7 +27,7 @@
 			<div class="form-group">
 				<label for="vorname">Vorname:</label>
 				<input type="text" class="form-control" id="vorname">
-				<label for="vorname">Nachname:</label>
+				<label for="nachname">Nachname:</label>
 				<input type="text" class="form-control" id="nachname">
 				<label for="mail">E-Mail:</label>
 				<input type="text" class="form-control" id="mail">
@@ -57,14 +57,38 @@
 			<h3><i class="fa fa-edit"></i> Spieler bearbeiten</h3>
 			<div class="form-group">
 				<label for="spieler">Spieler:</label>
-				<select class="form-control" id="spieler">
+				<select class="form-control" id="spieler" onchange="get_spieler_details();">
 					<option>Bitte wähle einen Spieler aus</option>
-					<option>2.</option>
-					<option>3.</option>
-					<option>Reserve</option>
+					{% for sp in spieler %}
+					<option value="{{ sp.name }}">{{ sp.vorname }} {{ sp.nachname }}</option>
+					{% endfor %}
 				</select>
 			</div>
-			<button class="btn btn-primary" onclick="change_spiel();"><i class="fa fa-folder"></i> Speichern</button>
+			<div class="form-group">
+				<label for="bea_vorname">Vorname:</label>
+				<input type="text" class="form-control" id="bea_vorname">
+				<label for="bea_nachname">Nachname:</label>
+				<input type="text" class="form-control" id="bea_nachname">
+				<label for="bea_lizenznummer">Lizenznummer:</label>
+				<input type="text" class="form-control" id="bea_lizenznummer">
+				<label for="bea_nummer">Rückennummer:</label>
+				<input type="text" class="form-control" id="bea_nummer">
+				<label for="bea_position">Position:</label>
+				<select class="form-control" id="bea_position">
+					<option value="Torwart">Torwart</option>
+					<option value="Verteidiger">Verteidiger</option>
+					<option value="Center / Top">Center / Top</option>
+					<option value="Flügel">Flügel</option>
+				</select>
+				<label for="bea_linie">Stamm-Linie:</label>
+				<select class="form-control" id="bea_linie">
+					<option value="1.">1.</option>
+					<option value="2.">2.</option>
+					<option value="3.">3.</option>
+					<option value="Reserve">Reserve</option>
+				</select>
+			</div>
+			<button class="btn btn-primary" onclick="change_spieler();"><i class="fa fa-folder"></i> Speichern</button>
 			<button class="btn btn-warning" onclick="delete_spieler();"><i class="fa fa-trash"></i> Löschen</button>
 			<button class="btn btn-primary" onclick="reset_tab_team();"><i class="fa fa-close"></i> Schliessen</button>
 		</div>
@@ -76,7 +100,7 @@
 			<button class="btn btn-primary" style="width: 200px;" onclick="show_training_bearbeiten();"><i class="fa fa-edit"></i> Training bearbeiten</button>
 		</div>
 		<div id="neues_training" style="display: none;">
-			<h3><i class="fa fa-user-plus"></i> Neues Training hinzufügen</h3>
+			<h3><i class="fa fa-plus"></i> Neues Training hinzufügen</h3>
 			<div class="form-group">
 				<label for="wann">Wann:</label>
 				<input type="date" class="form-control" id="wann">
@@ -94,12 +118,22 @@
 			<h3><i class="fa fa-edit"></i> Training bearbeiten</h3>
 			<div class="form-group">
 				<label for="training">Training:</label>
-				<select class="form-control" id="training">
+				<select class="form-control" id="training" onchange="get_training_details();">
 					<option>Bitte wähle ein Training aus</option>
-					<option>2.</option>
-					<option>3.</option>
-					<option>Reserve</option>
+					{% for training in trainings %}
+					<option value="{{ training.name }}">{{ training.name }} {{ training.ort }}</option>
+					{% endfor %}
 				</select>
+			</div>
+			<div class="form-group">
+				<label for="bea_wann">Wann:</label>
+				<input type="date" class="form-control" id="bea_wann" disabled>
+				<label for="bea_wo">Wo:</label>
+				<input type="text" class="form-control" id="bea_wo">
+				<label for="bea_von">Von:</label>
+				<input type="time" class="form-control" id="bea_von">
+				<label for="bea_bis">Bis:</label>
+				<input type="time" class="form-control" id="bea_bis">
 			</div>
 			<button class="btn btn-primary" onclick="change_training();"><i class="fa fa-folder"></i> Speichern</button>
 			<button class="btn btn-warning" onclick="delete_training();"><i class="fa fa-trash"></i> Löschen</button>
@@ -113,8 +147,24 @@
 			<button class="btn btn-primary" style="width: 200px;" onclick="show_spiel_bearbeiten();"><i class="fa fa-edit"></i> Spiel bearbeiten</button>
 		</div>
 		<div id="neues_spiel" style="display: none;">
-			<h3><i class="fa fa-user-plus"></i> Neues Spiel hinzufügen</h3>
+			<h3><i class="fa fa-plus"></i> Neues Spiel hinzufügen</h3>
 			<div class="form-group">
+				<div class="radio-inline">
+					<label><input type="radio" name="optradio" onchange="change_anz_spiele('1');" id="1spiel">1 Spiel</label>
+				</div>
+				<div class="radio-inline">
+					<label><input type="radio" name="optradio" onchange="change_anz_spiele('2');" id="2spiele" checked>2 Spiele</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="checkbox-inline"><input type="checkbox" value="" id="1heim">Spiel 1 Heim</label>
+				<label class="checkbox-inline"><input type="checkbox" value="" id="2heim">Spiel 2 Heim</label>
+			</div>
+			<div class="form-group">
+				<label for="gegner_1">Gegner Spiel 1:</label>
+				<input type="text" class="form-control" id="gegner_1">
+				<label for="gegner_2">Gegner Spiel 2:</label>
+				<input type="text" class="form-control" id="gegner_2">
 				<label for="spiel_wann">Wann:</label>
 				<input type="date" class="form-control" id="spiel_wann">
 				<label for="spiel_wo">Wo:</label>
@@ -131,12 +181,38 @@
 			<h3><i class="fa fa-edit"></i> Spiel bearbeiten</h3>
 			<div class="form-group">
 				<label for="spiel">Spiel:</label>
-				<select class="form-control" id="spiel">
+				<select class="form-control" id="spiel" onchange="get_spiel_details();">
 					<option>Bitte wähle ein Spiel aus</option>
-					<option>2.</option>
-					<option>3.</option>
-					<option>Reserve</option>
+					{% for spiel in spiele %}
+					<option value="{{ spiel.name }}">{{ spiel.name }} {{ spiel.ort }}</option>
+					{% endfor %}
 				</select>
+			</div>
+			<div class="form-group">
+				<div class="radio-inline">
+					<label><input type="radio" name="optradio" onchange="bea_change_anz_spiele('1');" id="bea_1spiel">1 Spiel</label>
+				</div>
+				<div class="radio-inline">
+					<label><input type="radio" name="optradio" onchange="bea_change_anz_spiele('2');" id="bea_2spiele" checked>2 Spiele</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="checkbox-inline"><input type="checkbox" value="" id="bea_1heim">Spiel 1 Heim</label>
+				<label class="checkbox-inline"><input type="checkbox" value="" id="bea_2heim">Spiel 2 Heim</label>
+			</div>
+			<div class="form-group">
+				<label for="bea_gegner_1">Gegner Spiel 1:</label>
+				<input type="text" class="form-control" id="bea_gegner_1">
+				<label for="bea_gegner_2">Gegner Spiel 2:</label>
+				<input type="text" class="form-control" id="bea_gegner_2">
+				<label for="bea_spiel_wann">Wann:</label>
+				<input type="date" class="form-control" id="bea_spiel_wann">
+				<label for="bea_spiel_wo">Wo:</label>
+				<input type="text" class="form-control" id="bea_spiel_wo">
+				<label for="bea_spiel_von">Von:</label>
+				<input type="time" class="form-control" id="bea_spiel_von">
+				<label for="bea_spiel_bis">Bis:</label>
+				<input type="time" class="form-control" id="bea_spiel_bis">
 			</div>
 			<button class="btn btn-primary" onclick="change_spiel();"><i class="fa fa-folder"></i> Speichern</button>
 			<button class="btn btn-warning" onclick="delete_spiel();"><i class="fa fa-trash"></i> Löschen</button>

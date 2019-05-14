@@ -16,6 +16,9 @@ def get_context(context):
 		frappe.throw(_("Du benötigst eine Trainer Rolle für den Zugriff auf diese Seite"), frappe.PermissionError)
 	context.show_sidebar=True
 	
+	context['spieler'] = frappe.db.sql("""SELECT `vorname`, `nachname`, `name` FROM `tabTeamPlaner Mitglied`""", as_dict=True)
+	context['trainings'] = frappe.db.sql("""SELECT `name`, `ort` FROM `tabTeamPlaner Training`""", as_dict=True)
+	context['spiele'] = frappe.db.sql("""SELECT `name`, `ort` FROM `tabTeamPlaner Spiel`""", as_dict=True)
 	return context
 	
 @frappe.whitelist()
@@ -35,3 +38,85 @@ def neuer_spieler(vorname, nachname, mail, lizenznummer, nummer, position, linie
 	invite_user(spieler.name)
 	add_user_to_events(spieler.name)
 	return spieler.name
+	
+@frappe.whitelist()
+def get_spieler_details(spieler):
+	spieler = frappe.get_doc("TeamPlaner Mitglied", spieler)
+	return spieler
+	
+@frappe.whitelist()
+def spieler_bearbeiten(spieler, vorname, nachname, lizenznummer, nummer, position, linie):
+	spieler = frappe.get_doc("TeamPlaner Mitglied", spieler)
+	spieler.vorname = vorname
+	spieler.nachname = nachname
+	spieler.lizenznummer = lizenznummer
+	spieler.rueckennummer = nummer
+	spieler.position = position
+	spieler.linie = linie
+	spieler.save()
+	return spieler.name
+	
+@frappe.whitelist()
+def spieler_entfernen(spieler):
+	spieler = frappe.get_doc("TeamPlaner Mitglied", spieler)
+	spieler.delete()
+	return
+	
+@frappe.whitelist()
+def neues_training(wann, wo, von, bis):
+	training = frappe.new_doc("TeamPlaner Training")
+	training.datum = wann
+	training.ort = wo
+	training.von = str(von) + ":00"
+	training.bis = str(bis) + ":00"
+	training.team = "Herren 2"
+	training.save()
+	return training.name
+	
+@frappe.whitelist()
+def get_training_details(training):
+	training = frappe.get_doc("TeamPlaner Training", training)
+	return training
+	
+@frappe.whitelist()
+def training_bearbeiten(training, wo, von, bis):
+	training = frappe.get_doc("TeamPlaner Training", training)
+	training.ort = wo
+	training.von = von
+	training.bis = bis
+	training.save()
+	return training.name
+	
+@frappe.whitelist()
+def training_entfernen(training):
+	training = frappe.get_doc("TeamPlaner Training", training)
+	training.delete()
+	return
+	
+@frappe.whitelist()
+def neues_spiel(wann, wo, von, bis, gegner_1, zwei_spiele, gegner_2, eins_heimspiel, zwei_heimspiel):
+	spiel = frappe.new_doc("TeamPlaner Spiel")
+	spiel.datum = wann
+	spiel.ort = wo
+	spiel.von = str(von) + ":00"
+	spiel.bis = str(bis) + ":00"
+	spiel.team = "Herren 2"
+	spiel.gegner = gegner_1
+	spiel.zweiter_gegner = gegner_2
+	spiel.zwei_spiele = zwei_spiele
+	spiel.eins_heimspiel = eins_heimspiel
+	spiel.zwei_heimspiel = zwei_heimspiel
+	
+	spiel.save()
+	return spiel.name
+	
+@frappe.whitelist()
+def get_spiel_details(spiel):
+	spiel = frappe.get_doc("TeamPlaner Spiel", spiel)
+	return spiel
+	
+@frappe.whitelist()
+def spiel_entfernen(spiel):
+	spiel = frappe.get_doc("TeamPlaner Spiel", spiel)
+	spiel.delete()
+	return
