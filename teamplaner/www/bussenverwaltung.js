@@ -70,3 +70,111 @@ function add_busse() {
 		frappe.msgprint("Bitte zuerst einen Spieler und eine Busse auswählen!");
 	}
 }
+
+function bussen_laden() {
+	var spieler = document.getElementById("spieler").value;
+	if (spieler != "leer") {
+		frappe.call({
+			method: "teamplaner.www.bussenverwaltung.get_spieler_bussen",
+			args:{
+				'spieler': spieler
+			},
+			callback: function(r)
+			{
+				var myNode = document.getElementById("bussen_table");
+				while (myNode.firstChild) {
+					myNode.removeChild(myNode.firstChild);
+				}
+				if (r.message) {
+					for (i=0; i<r.message.length; i++) {
+						var tr = document.createElement("tr");
+						
+						var spiel_td = document.createElement("td");
+						var training_td = document.createElement("td");
+						var betrag_td = document.createElement("td");
+						var bemerkung_td = document.createElement("td");
+						var btn_td = document.createElement("td");
+						
+						spiel_td.style.width = "10%";
+						training_td.style.width = "10%";
+						betrag_td.style.width = "20%";
+						bemerkung_td.style.width = "40%";
+						btn_td.style.width = "20%";
+						
+						var div_check_spiel = document.createElement("div");
+						var check_check_spiel = document.createElement("input");
+						check_check_spiel.type = "checkbox";
+						check_check_spiel.disabled = true;
+						if (r.message[i].spiel == 1) {
+							check_check_spiel.checked = true;
+						} else {
+							check_check_spiel.checked = false;
+						}
+						div_check_spiel.appendChild(check_check_spiel);
+						
+						var div_check_training = document.createElement("div");
+						var check_check_training = document.createElement("input");
+						check_check_training.type = "checkbox";
+						check_check_training.disabled = true;
+						if (r.message[i].training == 1) {
+							check_check_training.checked = true;
+						} else {
+							check_check_training.checked = false;
+						}
+						div_check_training.appendChild(check_check_training);
+						
+						var betrag_node = document.createTextNode(r.message[i].betrag);
+						var bemerkung_node = document.createTextNode(r.message[i].bemerkung);
+						
+						var btn = document.createElement("button");
+						btn.dataset.referenz = r.message[i].name;
+						btn.onclick = function() {
+							remove_busse(this);
+						};
+						btn.classList.add("btn");
+						btn.classList.add("btn-warning");
+						var btn_node = document.createTextNode("Busse entfernen");
+						btn.appendChild(btn_node);
+						
+						
+						
+						spiel_td.appendChild(div_check_spiel);
+						training_td.appendChild(div_check_training);
+						betrag_td.appendChild(betrag_node);
+						bemerkung_td.appendChild(bemerkung_node);
+						btn_td.appendChild(btn);
+						
+						tr.appendChild(spiel_td);
+						tr.appendChild(training_td);
+						tr.appendChild(betrag_td);
+						tr.appendChild(bemerkung_td);
+						tr.appendChild(btn);
+						
+						var element = document.getElementById("bussen_table");
+						element.appendChild(tr);
+					}
+				}
+			}
+		});
+	} else {
+		var myNode = document.getElementById("bussen_table");
+		while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+		}
+	}
+}
+
+function remove_busse(busse) {
+	busse = busse.dataset.referenz;
+	frappe.call({
+		method: "teamplaner.www.bussenverwaltung.remove_busse",
+		args:{
+			'busse': busse
+		},
+		callback: function(r)
+		{
+			bussen_laden();
+			frappe.msgprint("Die Busse wurde entfernt");
+		}
+	});
+}

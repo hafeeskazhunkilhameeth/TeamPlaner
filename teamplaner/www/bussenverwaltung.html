@@ -14,7 +14,7 @@
 <form>
 	<div class="form-group">
 		<label for="sel1">Spieler Auswahl</label>
-		<select class="form-control" id="spieler">
+		<select class="form-control" id="spieler" onclick="bussen_laden();">
 			<option value="leer">Bitte Spieler auswählen</option>
 			{% for spieler in alle_spieler %}
 				<option value="{{ spieler.name }}">{{ spieler.vorname }} {{ spieler.nachname }}</option>
@@ -22,32 +22,51 @@
 		</select>
 	</div>
 </form>
-<form>
-	<div class="form-group">
-		<label for="sel1">Bussen Auswahl</label>
-		<select class="form-control" id="busse" onchange="fetch_bussen_details();">
-			<option value="leer">Bitte Busse auswählen</option>
-			{% for busse in alle_bussen %}
-				<option value="{{ busse.beschreibung }}&%&{{ busse.betrag }}&%&{{ busse.training }}&%&{{ busse.spiel }}">{{ busse.beschreibung }}</option>
-			{% endfor %}
-		</select>
-	</div>
-</form>
-<form>
-	<label class="checkbox-inline"><input type="checkbox" value="" id="training">Training</label>
-	<label class="checkbox-inline"><input type="checkbox" value="" id="spiel">Spiel</label>
-	<div class="input-group">
-		<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-		<input id="betrag" type="text" class="form-control" name="betrag" placeholder="Betrag">
-	</div>
-	<div class="form-group">
-		<label for="comment">Beschreibung:</label>
-		<textarea class="form-control" rows="5" id="comment"></textarea>
-	</div>
-</form>
-<button class="btn btn-primary" onclick="add_busse()">Busse speichern</button>
 
-<script src="https://unpkg.com/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js"></script>
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#hinzu">Busse Hinzufügen</a></li>
+	<li><a data-toggle="tab" href="#entfernen">Busse entfernen</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id="hinzu" class="tab-pane fade in active">
+		<h3>Busse Hinzufügen</h3>
+		<form>
+			<div class="form-group">
+				<label for="sel1">Bussen Auswahl</label>
+				<select class="form-control" id="busse" onchange="fetch_bussen_details();">
+					<option value="leer">Bitte Busse auswählen</option>
+					{% for busse in alle_bussen %}
+						<option value="{{ busse.beschreibung }}&%&{{ busse.betrag }}&%&{{ busse.training }}&%&{{ busse.spiel }}">{{ busse.beschreibung }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</form>
+		<form>
+			<label class="checkbox-inline"><input type="checkbox" value="" id="training">Training</label>
+			<label class="checkbox-inline"><input type="checkbox" value="" id="spiel">Spiel</label>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+				<input id="betrag" type="text" class="form-control" name="betrag" placeholder="Betrag">
+			</div>
+			<div class="form-group">
+				<label for="comment">Beschreibung:</label>
+				<textarea class="form-control" rows="5" id="comment"></textarea>
+			</div>
+		</form>
+		<button class="btn btn-primary" onclick="add_busse()">Busse speichern</button>
+	</div>
+	<div id="entfernen" class="tab-pane fade">
+		<h3>Bussen Entfernen</h3>
+		<table id="bussen_table" style="width: 100%;" class="table-striped">
+		
+		</table>
+	</div>
+</div>
+
+
+
+
 {% endblock %}
 
 

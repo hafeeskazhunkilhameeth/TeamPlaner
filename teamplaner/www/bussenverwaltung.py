@@ -53,3 +53,12 @@ def add_busse(betrag, beschreibung, training, spiel, spieler):
 	mitglied.save()
 	
 	return "OK"
+	
+@frappe.whitelist()
+def get_spieler_bussen(spieler):
+	alle_bussen_von_spieler = frappe.db.sql("""SELECT `spiel`, `training`, `betrag`, `bemerkung`, `name` FROM `tabTeamPlaner Bussenverweis` WHERE `parent` = '{spieler}'""".format(spieler=spieler), as_dict=True)
+	return alle_bussen_von_spieler
+	
+@frappe.whitelist()
+def remove_busse(busse):
+	return frappe.db.sql("""DELETE FROM `tabTeamPlaner Bussenverweis` WHERE `name` = '{busse}'""".format(busse=busse), as_list=True)
