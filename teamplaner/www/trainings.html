@@ -37,20 +37,20 @@
 				{% if sp[3] == frappe.session.user %}
 					{% if sp[2] == 'Anwesend' %}
 						<label class="switch">
-						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
 						  <span class="slider round"></span>
 						</label>
-						{% if stundensperre <= 1 %}
+						{% if stundensperre < 1 %}
 							<br>Die Anmeldefrist ist abgelaufen
 						{% else %}
 							<br>An-/Abmeldung
 						{% endif %}
 					{% else %}
 						<label class="switch">
-						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
 						  <span class="slider round"></span>
 						</label>
-						{% if stundensperre <= 1 %}
+						{% if stundensperre < 1 %}
 							<br>Die Anmeldefrist ist abgelaufen
 						{% else %}
 							<br>An-/Abmeldung
@@ -116,20 +116,20 @@
 				{% if sp[3] == frappe.session.user %}
 					{% if sp[2] == 'Anwesend' %}
 						<label class="switch">
-						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
 						  <span class="slider round"></span>
 						</label>
-						{% if stundensperre <= 1 %}
+						{% if stundensperre < 1 %}
 							<br>Die Anmeldefrist ist abgelaufen
 						{% else %}
 							<br>An-/Abmeldung
 						{% endif %}
 					{% else %}
 						<label class="switch">
-						  <input type="checkbox"{% if stundensperre <= 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
+						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
 						  <span class="slider round"></span>
 						</label>
-						{% if stundensperre <= 1 %}
+						{% if stundensperre < 1 %}
 							<br>Die Anmeldefrist ist abgelaufen
 						{% else %}
 							<br>An-/Abmeldung

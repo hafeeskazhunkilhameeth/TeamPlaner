@@ -8,10 +8,18 @@ function show_spieler_bearbeiten() {
 	document.getElementById("spieler_bearbeiten").style.display = "block";
 }
 
+function show_allgemeine_einstellungen() {
+	document.getElementById("saison_von").value = "{{ saisondaten.saison_von }}";
+	document.getElementById("saison_bis").value = "{{ saisondaten.saison_bis }}";
+	document.getElementById("team_section").style.display = "none";
+	document.getElementById("allgemeine_einstellungen").style.display = "block";
+}
+
 function reset_tab_team() {
 	document.getElementById("team_section").style.display = "block";
 	document.getElementById("spieler_bearbeiten").style.display = "none";
 	document.getElementById("neuer_spieler").style.display = "none";
+	document.getElementById("allgemeine_einstellungen").style.display = "none";
 }
 
 function show_neues_training() {
@@ -397,4 +405,33 @@ function get_spiel_details() {
 		document.getElementById("bea_1spiel").checked = false;
 		document.getElementById("bea_2spiele").checked = false;
 	}
+}
+
+function delete_alte_daten() {
+	frappe.show_message("Bitte warten");
+	frappe.call({
+		'method': "teamplaner.www.teamverwaltung.delete_old_data",
+		'args': {},
+		'callback': function(r) {
+			frappe.hide_message();
+			frappe.msgprint("Alle Trainings/Spiele vor dem heutigen Datum wurden entfernt.");
+		}
+	});
+}
+
+function allgemeine_einstellungen_save() {
+	frappe.show_message("Bitte warten");
+	var von = document.getElementById("saison_von").value;
+	var bis = document.getElementById("saison_bis").value;
+	frappe.call({
+		'method': "teamplaner.www.teamverwaltung.change_saisondaten",
+		'args': {
+			'von': von,
+			'bis': bis
+		},
+		'callback': function(r) {
+			frappe.hide_message();
+			frappe.msgprint("Die Saisondaten wurden angepasst.");
+		}
+	});
 }

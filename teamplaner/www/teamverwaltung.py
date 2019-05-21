@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from teamplaner.teamplaner.doctype.teamplaner_mitglied.teamplaner_mitglied import invite_user, add_user_to_events
+from teamplaner.www.statistik import get_saisondaten
 
 #no_cache = 1
 
@@ -19,6 +20,7 @@ def get_context(context):
 	context['spieler'] = frappe.db.sql("""SELECT `vorname`, `nachname`, `name` FROM `tabTeamPlaner Mitglied`""", as_dict=True)
 	context['trainings'] = frappe.db.sql("""SELECT `name`, `ort` FROM `tabTeamPlaner Training`""", as_dict=True)
 	context['spiele'] = frappe.db.sql("""SELECT `name`, `ort` FROM `tabTeamPlaner Spiel`""", as_dict=True)
+	context['saisondaten'] = get_saisondaten()
 	return context
 	
 @frappe.whitelist()
@@ -119,4 +121,18 @@ def get_spiel_details(spiel):
 def spiel_entfernen(spiel):
 	spiel = frappe.get_doc("TeamPlaner Spiel", spiel)
 	spiel.delete()
+	return
+	
+@frappe.whitelist()
+def delete_old_data():
+	training = frappe.db.sql("""DELETE FROM `tabTeamPlaner Training` WHERE `name` < CURDATE()""", as_dict=True)
+	spiele = frappe.db.sql("""DELETE FROM `tabTeamPlaner Spiel` WHERE `name` < CURDATE()""", as_dict=True)
+	return
+	
+@frappe.whitelist()
+def change_saisondaten(von, bis):
+	team = frappe.get_doc("TeamPlaner Team", "Herren 2")
+	team.saison_von = von
+	team.saison_bis = bis
+	team.save()
 	return
