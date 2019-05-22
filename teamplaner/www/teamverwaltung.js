@@ -122,13 +122,15 @@ function add_training() {
 	var wo = document.getElementById("wo").value;
 	var von = document.getElementById("von").value;
 	var bis = document.getElementById("bis").value;
+	var details = document.getElementById("details").value;
 	frappe.call({
 		'method': "teamplaner.www.teamverwaltung.neues_training",
 		'args': {
 			'wann': wann,
 			'wo': wo,
 			'von': von,
-			'bis':bis
+			'bis':bis,
+			'details': details
 		},
 		'callback': function(r) {
 			frappe.hide_message();
@@ -151,6 +153,7 @@ function get_training_details() {
 				document.getElementById("bea_wo").value = training.ort;
 				document.getElementById("bea_von").value = training.von;
 				document.getElementById("bea_bis").value = training.bis;
+				document.getElementById("bea_details").value = training.details;
 			}
 		});
 	} else {
@@ -158,6 +161,7 @@ function get_training_details() {
 		document.getElementById("bea_wo").value = "";
 		document.getElementById("bea_von").value = "";
 		document.getElementById("bea_bis").value = "";
+		document.getElementById("bea_details").value = "";
 	}
 }
 
@@ -254,13 +258,15 @@ function change_training() {
 	var wo = document.getElementById("bea_wo").value;
 	var von = document.getElementById("bea_von").value;
 	var bis = document.getElementById("bea_bis").value;
+	var details = document.getElementById("bea_details").value;
 	frappe.call({
 		'method': "teamplaner.www.teamverwaltung.training_bearbeiten",
 		'args': {
 			'training': training,
 			'wo': wo,
 			'von': von,
-			'bis':bis
+			'bis':bis,
+			'details': details
 		},
 		'callback': function(r) {
 			frappe.hide_message();

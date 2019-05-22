@@ -44,3 +44,8 @@ def get_context(context):
 		
 		context['spieler'][training.name] = teilnehmer_details(training.name, 'TeamPlaner Training')
 	return context
+	
+@frappe.whitelist()
+def get_details(training):
+	training = frappe.get_doc("TeamPlaner Training", training)
+	return training.details

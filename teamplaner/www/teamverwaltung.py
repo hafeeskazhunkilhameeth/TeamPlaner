@@ -65,13 +65,14 @@ def spieler_entfernen(spieler):
 	return
 	
 @frappe.whitelist()
-def neues_training(wann, wo, von, bis):
+def neues_training(wann, wo, von, bis, details):
 	training = frappe.new_doc("TeamPlaner Training")
 	training.datum = wann
 	training.ort = wo
 	training.von = str(von) + ":00"
 	training.bis = str(bis) + ":00"
 	training.team = "Herren 2"
+	training.details = details
 	training.save()
 	return training.name
 	
@@ -81,11 +82,12 @@ def get_training_details(training):
 	return training
 	
 @frappe.whitelist()
-def training_bearbeiten(training, wo, von, bis):
+def training_bearbeiten(training, wo, von, bis, details):
 	training = frappe.get_doc("TeamPlaner Training", training)
 	training.ort = wo
 	training.von = von
 	training.bis = bis
+	training.details = details
 	training.save()
 	return training.name
 	

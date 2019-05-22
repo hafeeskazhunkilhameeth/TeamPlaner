@@ -101,3 +101,21 @@ function update_bemerkung(training) {
 		}
 	});
 }
+
+function show_details(training) {
+	frappe.call({
+		method: "teamplaner.www.trainings.get_details",
+		args:{
+			'training': training
+		},
+		callback: function(r)
+		{
+			var details = r.message;
+			if (details) {
+				frappe.msgprint(details, "Training Details");
+			} else {
+				frappe.msgprint("Es wurden noch keine Details durch den Trainer erfasst.", "Training Details");
+			}
+		}
+	});
+}
