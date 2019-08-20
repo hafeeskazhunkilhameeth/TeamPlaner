@@ -36,8 +36,41 @@ def get_context(context):
 	context['top_ten'] = scorerliste()['top_ten']
 	context['saisondaten'] = saisondaten
 	context['saisonverlauf'] = get_saisonverlauf()
+	context['formkurve'] = get_formkurve(team)
 
 	return context
+	
+def get_formkurve(team):
+	data = []
+	alle_spieler = frappe.db.sql("""SELECT
+										`mitglied`.`vorname`,
+										`mitglied`.`nachname`,
+										`mitglied`.`mail`
+									FROM (`tabTeamPlaner Mitglied` AS `mitglied`
+									INNER JOIN `tabTeamplaner Team Verweis` AS `verweis` ON `mitglied`.`name` = `verweis`.`parent`)
+									WHERE `verweis`.`team` = '{team}'""".format(team=team), as_dict=True)
+									
+	for spieler in alle_spieler:
+		_data = {}
+		_data['details'] = {
+			'vorname': spieler.vorname,
+			'nachname': spieler.nachname,
+			'mail': spieler.mail
+		}
+		_data['formkurve'] = frappe.db.sql("""SELECT
+												`status`
+											FROM
+												`tabTeamPlaner Spieler Verweis Anwesenheit`
+											WHERE
+												`parenttype` = 'TeamPlaner Training'
+											AND `mail` = '{mail}'
+											AND `parent` <= CURDATE()
+											ORDER BY `parent` DESC
+											LIMIT 5""".format(mail=spieler.mail), as_list=True)
+				
+		data.append(_data)
+		
+	return data
 	
 def spieler_all_over(spieler, team):
 	data = {}

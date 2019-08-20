@@ -30,6 +30,17 @@
 {% for spieler in presenz_alle_spieler %}
 {% set ref = spieler.details.name | replace("-", "") %}
 <div class="col-xs-12">
+{% for formspieler in formkurve %}
+	{% if spieler.details.mail == formspieler.details.mail %}
+	<span class="{% if formspieler.formkurve|len == 5 %}{% if formspieler.formkurve[4][0] == "Anwesend" %}fa fa-thumbs-up checked-ok {% else %}fa fa-thumbs-down checked-nok{% endif %}{% else %}fa fa-question{% endif %}"></span>
+	<span class="{% if formspieler.formkurve|len >= 4 %}{% if formspieler.formkurve[3][0] == "Anwesend" %}fa fa-thumbs-up checked-ok {% else %}fa fa-thumbs-down checked-nok{% endif %}{% else %}fa fa-question{% endif %}"></span>
+	<span class="{% if formspieler.formkurve|len >= 3 %}{% if formspieler.formkurve[2][0] == "Anwesend" %}fa fa-thumbs-up checked-ok {% else %}fa fa-thumbs-down checked-nok{% endif %}{% else %}fa fa-question{% endif %}"></span>
+	<span class="{% if formspieler.formkurve|len >= 2 %}{% if formspieler.formkurve[1][0] == "Anwesend" %}fa fa-thumbs-up checked-ok {% else %}fa fa-thumbs-down checked-nok{% endif %}{% else %}fa fa-question{% endif %}"></span>
+	<span class="{% if formspieler.formkurve|len >= 1 %}{% if formspieler.formkurve[0][0] == "Anwesend" %}fa fa-thumbs-up checked-ok {% else %}fa fa-thumbs-down checked-nok{% endif %}{% else %}fa fa-question{% endif %}"></span>
+	{% endif %}
+{% endfor %}
+</div>
+<div class="col-xs-12">
 <div id="{{ ref }}"></div>
 </div>
 {% endfor %}
