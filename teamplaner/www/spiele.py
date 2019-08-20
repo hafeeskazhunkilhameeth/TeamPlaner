@@ -16,7 +16,10 @@ def get_context(context):
 	if "TeamPlaner Spieler" not in frappe.get_roles(frappe.session.user):
 		frappe.throw(_("Du benötigst eine Spieler Rolle für den Zugriff auf diese Seite"), frappe.PermissionError)
 	context.show_sidebar=True
-	context['trainings'] = frappe.client.get_list('TeamPlaner Spiel', fields=['name', 'von', 'bis', 'ort', 'aufgebot_status', 'zwei_aufgebot_status', 'beschriftung', 'gegner', 'zweiter_gegner'], filters=[['datum','>=',nowdate()]], order_by='name', limit_page_length=1000)
+	user = frappe.session.user
+	spieler = frappe.db.sql("""SELECT `name` FROM `tabTeamPlaner Mitglied` WHERE `mail` = '{user}'""".format(user=user), as_list=True)[0][0]
+	team = frappe.db.sql("""SELECT `team` FROM `tabTeamplaner Team Verweis` WHERE `parent` = '{spieler}' LIMIT 1""".format(spieler=spieler), as_list=True)[0][0]
+	context['trainings'] = frappe.client.get_list('TeamPlaner Spiel', fields=['name', 'von', 'bis', 'ort', 'aufgebot_status', 'zwei_aufgebot_status', 'beschriftung', 'gegner', 'zweiter_gegner'], filters=[['datum','>=',nowdate()], ['team','=',team]], order_by='name', limit_page_length=1000)
 	context['teilnehmer'] = {}
 	context['spieler'] = {}
 	i = 1

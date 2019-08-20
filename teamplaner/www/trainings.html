@@ -139,6 +139,7 @@
 				{% endif %}
 			{% endfor %}
 			<br><br><button type="button" class="btn btn-info" onclick="add_bemerkung('{{ training.name }}');"><i class="fa fa-comment"></i> Bemerkung erfassen</button>
+			<br><br><button type="button" class="btn btn-info" onclick="show_details('{{ training.name }}');"><i class="fa fa-info-circle"></i> Trainings Details</button>
 			</center></div><br>
 			<div><center>
 				<i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}
