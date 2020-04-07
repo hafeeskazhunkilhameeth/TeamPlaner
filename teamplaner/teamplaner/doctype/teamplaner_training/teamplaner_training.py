@@ -19,7 +19,6 @@ class TeamPlanerTraining(Document):
 				row.position = spieler.position
 				row.status = 'Anwesend'
 				row.mail = spieler.mail
-		self.beschriftung = getdate(self.datum).strftime("%d.%m.%Y")
 				
 @frappe.whitelist()
 def massenanlage(von, bis, start, anz, team, ort):

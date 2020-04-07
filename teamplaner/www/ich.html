@@ -1,0 +1,28 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Mein Profil") }}{% endblock %}
+{% block header %}<center><h1>{{ _("Mein Profil") }}</h1></center>{% endblock %}
+
+{% block page_content %}
+<!-- no-cache -->
+<div class="row">
+	<div class="col-sm-12">
+		<img class="mx-auto d-block" src="{{ user_data.user_image }}" alt="{{ user_data.full_name }}" height="200" width="200"> 
+		<ul class="list-unstyled">
+			<li><a href="/update-password">{{ _("Passwort zurücksetzen") }}</a></li>
+			<li><a href="">{{ _("Meine Bussen") }}</a></li>
+			<li><a href="/trainings">{{ _("Trainings") }}</a></li>
+			<li><a href="/spiele">{{ _("Spiele") }}</a></li>
+			<li><a href="/statistik">{{ _("Statistik") }}</a></li>
+		</ul>
+		<div class="form-group">
+			<label for="usr">Name:</label>
+			<input type="text" class="form-control" id="usr" value="{{ spieler_data.vorname }} {{ spieler_data.nachname }}" readonly>
+			<label for="rueckennummer">Rückennummer:</label>
+			<input type="text" class="form-control" id="rueckennummer" value="{{ spieler_data.rueckennummer }}" readonly>
+			<label for="lizenz">Lizenz Nr.:</label>
+			<input type="text" class="form-control" id="lizenz" value="{{ spieler_data.lizenznummer }}" readonly>
+		</div>
+	</div>
+</div>
+{% endblock %}

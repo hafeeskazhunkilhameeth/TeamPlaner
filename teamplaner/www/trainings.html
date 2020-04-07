@@ -3,167 +3,118 @@
 {% block title %}{{ _("Trainings") }}{% endblock %}
 {% block header %}<h1>{{ _("Trainings") }}</h1>{% endblock %}
 
-{% block page_sidebar %}
-{% include "templates/pages/web_sidebar.html" %}
-{% endblock %}
-
 {% block page_content %}
-<div class="panel-group" id="accordion_kurz">
-{% for training in trainings_kurz %}
-	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
-	<div class="panel panel-default">
-		<div class="panel-heading"
-		{% for sp in spieler[training.name] %}
-		{% if sp[3] == frappe.session.user %}
-		{% if sp[2] == 'Anwesend' %}
-		 style="background-color: lightgreen;"
-		{% else %}
-		 style="background-color: lightcoral;"
-		{% endif %}
-		{% endif %}
-		{% endfor %}
-		>
-		  <h4 class="panel-title">
-			<!--{# <a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}</a> #}-->
-			<a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}"><center>
-			{{ training.beschriftung }} - {{ training.ort or 'Ort nicht definiert' }}<br>{{ teilnehmende_spieler[training.name] }} & {{ teilnehmende_goalies[training.name] }}</center></a>
-		  </h4>
-		</div>
-		<div id="{{ training.name }}" class="panel-collapse collapse">
-		  <div class="panel-body">
-			<div><center>
-			{% for sp in spieler[training.name] %}
-				{% if sp[3] == frappe.session.user %}
-					{% if sp[2] == 'Anwesend' %}
-						<label class="switch">
-						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
-						  <span class="slider round"></span>
-						</label>
-						{% if stundensperre < 1 %}
-							<br>Die Anmeldefrist ist abgelaufen
-						{% else %}
-							<br>An-/Abmeldung
-						{% endif %}
-					{% else %}
-						<label class="switch">
-						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
-						  <span class="slider round"></span>
-						</label>
-						{% if stundensperre < 1 %}
-							<br>Die Anmeldefrist ist abgelaufen
-						{% else %}
-							<br>An-/Abmeldung
-						{% endif %}
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-			<br><br><button type="button" class="btn btn-info" onclick="add_bemerkung('{{ training.name }}');"><i class="fa fa-comment"></i> Bemerkung erfassen</button>
-			<br><br><button type="button" class="btn btn-info" onclick="show_details('{{ training.name }}');"><i class="fa fa-info-circle"></i> Trainings Details</button>
-			</center></div><br>
-			<div><center>
-				<i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}
-			</center></div><br>
-			<h4>Teilnehmer Übersicht</h4>
-			<table style="width: 100%">
-				{% for sp in spieler[training.name] %}
-				<tr style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
-					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}</td>
-					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
-				</tr>
-				{% if sp[4] %}
-				<tr>
-					<td style="width: 10%; height: 30px;"></td>
-					<td style="width 90%; height: 30px;">{{ sp[4] }}</td>
-				</tr>
-				{% endif %}
-				{% endfor %}
-			</table>
-		  </div>
-		</div>
-	 </div>
-{% endfor %}
-</div> 
-
-<button type="button" class="btn btn-primary btn-block" onclick="alle_trainings_laden();" id="show_all_btn">Alle Trainings laden</button>
-
-
-<div class="panel-group hidden" id="accordion">
+<div id="accordion">
 {% for training in trainings %}
-	{% set stundensperre = frappe.utils.date_diff(training.name, frappe.utils.now()) %}
-	<div class="panel panel-default">
-		<div class="panel-heading"
-		{% for sp in spieler[training.name] %}
-		{% if sp[3] == frappe.session.user %}
-		{% if sp[2] == 'Anwesend' %}
-		 style="background-color: lightgreen;"
-		{% else %}
-		 style="background-color: lightcoral;"
-		{% endif %}
-		{% endif %}
-		{% endfor %}
-		>
-		  <h4 class="panel-title">
-			<!--{# <a data-toggle="collapse" data-parent="#accordion_kurz" href="#{{ training.name }}">
-			{{ training.beschriftung }} ({{ teilnehmer[training.name] }}) - {{ training.ort or 'Ort nicht definiert' }}</a> #}-->
-			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}"><center>
-			{{ training.beschriftung }} - {{ training.ort or 'Ort nicht definiert' }}<br>{{ teilnehmende_spieler[training.name] }} & {{ teilnehmende_goalies[training.name] }}</center></a>
-		  </h4>
-		</div>
-		<div id="{{ training.name }}" class="panel-collapse collapse">
-		  <div class="panel-body">
-			<div><center>
-			{% for sp in spieler[training.name] %}
-				{% if sp[3] == frappe.session.user %}
-					{% if sp[2] == 'Anwesend' %}
-						<label class="switch">
-						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} checked onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
-						  <span class="slider round"></span>
-						</label>
-						{% if stundensperre < 1 %}
-							<br>Die Anmeldefrist ist abgelaufen
-						{% else %}
-							<br>An-/Abmeldung
-						{% endif %}
-					{% else %}
-						<label class="switch">
-						  <input type="checkbox"{% if stundensperre < 1 %} disabled{% endif %} onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}', this);">
-						  <span class="slider round"></span>
-						</label>
-						{% if stundensperre < 1 %}
-							<br>Die Anmeldefrist ist abgelaufen
-						{% else %}
-							<br>An-/Abmeldung
-						{% endif %}
+	{% set id = training.name|replace("0", "A")|replace("1", "B")|replace("2", "C")|replace("3", "D")|replace("4", "E")|replace("5", "F")|replace("6", "G")|replace("7", "H")|replace("8", "I")|replace("9", "J") %}
+	<div class="card">
+		<div class="card-header {% if training.status == "Abwesend" %} alert-danger{% else %} alert-success{% endif %}" data-toggle="collapse" href="#Training{{ id }}" style="cursor: pointer;">
+			<center><a class="collapsed card-link">
+				{{ frappe.utils.get_datetime(training.datum).strftime('%d.%m.%Y') }} - {{ training.beschriftung }}<br>
+				{% for status in anwesenheiten %}
+					{% if status['training'] == training.name %}
+						{{ status['spieler'] }} Spieler / {{ status['torwarte'] }} Goalie(s)
 					{% endif %}
-				{% endif %}
-			{% endfor %}
-			<br><br><button type="button" class="btn btn-info" onclick="add_bemerkung('{{ training.name }}');"><i class="fa fa-comment"></i> Bemerkung erfassen</button>
-			<br><br><button type="button" class="btn btn-info" onclick="show_details('{{ training.name }}');"><i class="fa fa-info-circle"></i> Trainings Details</button>
-			</center></div><br>
-			<div><center>
-				<i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}
-			</center></div><br>
-			<h4>Teilnehmer Übersicht</h4>
-			<table style="width: 100%">
-				{% for sp in spieler[training.name] %}
-				<tr style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
-					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}</td>
-					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
-				</tr>
-				{% if sp[4] %}
-				<tr>
-					<td style="width: 10%; height: 30px;"></td>
-					<td style="width 90%; height: 30px;">{{ sp[4] }}</td>
-				</tr>
-				{% endif %}
 				{% endfor %}
-			</table>
-		  </div>
+			</a></center>
 		</div>
-	 </div>
+		<div id="Training{{ id }}" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<center><label class="switch">
+						<input type="checkbox"{% if training.status == "Anwesend" %} checked data-toggle="modal" data-target="#{{ id }}"{% else %} onclick="anmelden('{{ training.referenz }}');"{% endif %}>
+						<span class="slider round"></span>
+						</label></center>
+					</div>
+					<div class="col-sm-6">
+						<i class="fa fa-map-marker"></i> {{ training.ort }}
+					</div>
+					<div class="col-sm-6">
+						<i class="fa fa-bell"></i> {{ training.von }} - {{ training.bis }}
+					</div>
+					{% if training.details %}<br><br>
+					<div class="col-sm-6">
+						<i class="fa fa-info"></i> {{ training.details }}
+					</div>
+					{% endif %}
+					<div class="col-sm-12">
+						<center><button type="button" class="btn btn-dark" style="margin: 5px;" data-toggle="modal" data-target="#bemerkung{{ id }}">Bemerkung</button></center>
+					</div>
+				</div>
+				{% for _spieler in anwesenheiten %}
+					{% if _spieler['training'] == training.name %}
+					{% for spieler in _spieler['alle'] %}
+						{% if spieler.status == "Anwesend" %}
+							<div class="alert alert-success">
+								{{ spieler.vorname }} {{ spieler.nachname }}{% if spieler.bemerkung %}<br>{{ spieler.bemerkung }}{% endif %}
+							</div>
+						{% else %}
+							<div class="alert alert-danger">
+								{{ spieler.vorname }} {{ spieler.nachname }}<br>{{ spieler.bemerkung }}
+							</div>
+						{% endif %}
+					{% endfor %}
+					{% endif %}
+				{% endfor %} 
+			</div>
+		</div>
+	</div>
+	<!-- The Modal -->
+	<div class="modal" id="{{ id }}">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+
+		  <!-- Modal Header -->
+		  <div class="modal-header">
+			<h4 class="modal-title">Bemerkung bezgl. Abmeldung</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+
+		  <!-- Modal body -->
+		  <div class="modal-body">
+			 <div class="form-group">
+			  <textarea class="form-control" rows="5" id="comment{{ training.referenz }}" required oninput="activate_btn('btn{{ training.referenz }}');"></textarea>
+			</div>
+		  </div>
+
+		  <!-- Modal footer -->
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal" id="btn{{ training.referenz }}" onclick="abmelden('{{ training.referenz }}');" disabled>Abmelden</button>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+	
+	<!-- The Modal -->
+	<div class="modal" id="bemerkung{{ id }}">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+
+		  <!-- Modal Header -->
+		  <div class="modal-header">
+			<h4 class="modal-title">Bemerkung hinzufügen</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+
+		  <!-- Modal body -->
+		  <div class="modal-body">
+			 <div class="form-group">
+			  <textarea class="form-control" rows="5" id="bemerkung{{ training.referenz }}"></textarea>
+			</div>
+		  </div>
+
+		  <!-- Modal footer -->
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="bemerkung('{{ training.referenz }}');">Bemerkung erfassen</button>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
 {% endfor %}
-</div> 
+</div>
 {% endblock %}
 
 
