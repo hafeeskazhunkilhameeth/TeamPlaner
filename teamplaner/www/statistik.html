@@ -1,0 +1,85 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Statistik") }}{% endblock %}
+{% block header %}<h1>{{ _("Statistik") }}</h1>{% endblock %}
+
+{% block page_content %}
+	<h2>{{ tabelle["data"]["title"] }}</h2><br>
+	<table style="width: 100%;">
+		<tr>
+			<th>Rang</th>
+			<th></th>
+			<th>Team</th>
+			<th>Spiele</th>
+			<th>Siege</th>
+			<th>Unentschieden</th>
+			<th>Niederlagen</th>
+			<th>Torverhältniss</th>
+			<th>Tordifferenz</th>
+			<th>Punkte</th>
+		</tr>
+		{% for ranking in tabelle["data"]["regions"][0]["rows"] %}
+			<tr>
+				{% for details in ranking["cells"] %}
+					{% if details["image"] %}
+						<td><img src='{{ details["image"]["url"] }}'></td>
+					{% else %}
+						{% if loop.index > 3 %}
+							<td style="text-align: center;">{{ details["text"][0] }}</td>
+						{% else %}
+							<td>{{ details["text"][0] }}</td>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+	<br><h2>{{ resultate["data"]["title"] }}</h2><br>
+	<table style="width: 100%;">
+		<tr>
+			<th>Wann, Wo</th>
+			<th>Heim</th>
+			<th>Gast</th>
+			<th>Resultat</th>
+		</tr>
+		{% for spiel in resultate["data"]["regions"][0]["rows"] %}
+			<tr>
+				<td>{{ spiel["cells"][0]["text"][0] }}, {{ spiel["cells"][0]["text"][1] }}<br>{{ spiel["cells"][1]["text"][0] }}, {{ spiel["cells"][1]["text"][1] }}</td>
+				<td>{{ spiel["cells"][2]["text"][0] }}</td>
+				<td>{{ spiel["cells"][3]["text"][0] }}</td>
+				<td>{{ spiel["cells"][4]["text"][0] }}</td>
+			</tr>
+		{% endfor %}
+	</table><br>
+	<h2>Anwesenheitsstatistik</h2><br>
+	{% for spieler in spieler_statistik %}
+		<div id='{{ spieler["id"] }}'></div>
+	{% endfor %}
+	<script src="https://unpkg.com/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
+	<script>
+		{% for spieler in spieler_statistik %}
+			const data{{ spieler["id"]|replace("-", "") }} = {
+				labels: ["Anwesend", "Abwesend"
+				],
+				datasets: [
+					{
+						name: "Anwesend",
+						values: [{{ spieler["anwesend"]|int }}, {{ spieler["abwesend"]|int }}]
+					}
+				]
+			};
+
+			const chart{{ spieler["id"]|replace("-", "") }} = new frappe.Chart("#{{ spieler["id"] }}", {  // or a DOM element,
+														// new Chart() in case of ES6 module with above usage
+				title: "{{ spieler["spieler"] }}",
+				data: data{{ spieler["id"]|replace("-", "") }},
+				type: 'percentage',
+				height: 100,
+				colors: ['#00cc33', '#ff0000']
+			});
+		{% endfor %}
+	</script>
+{% endblock %}
+
+
+

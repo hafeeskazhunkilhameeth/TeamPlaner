@@ -10,4 +10,5 @@ def get_context(context):
 		context['start_btn'] = '<a href="/login" class="btn btn-primary" role="button">Anmelden</a>'
 	else:
 		context['start_btn'] = '<a href="/me" class="btn btn-primary" role="button">Mein Profil</a>'
+		#context['start_btn'] = '<a onclick="get_tabelle();" class="btn btn-primary" role="button">Tabelle</a>'
 	return context
