@@ -22,19 +22,25 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-sm-12">
-						<center><label class="switch">
-						<input type="checkbox"{% if training.status == "Anwesend" %} checked data-toggle="modal" data-target="#{{ id }}"{% else %} onclick="anmelden('{{ training.referenz }}');"{% endif %}>
-						<span class="slider round"></span>
-						</label></center>
+						<center>
+						{% if frappe.utils.get_datetime(training.datum).strftime('%d.%m.%Y') != frappe.utils.get_datetime(heute).strftime('%d.%m.%Y') %}
+							<label class="switch">
+								<input type="checkbox"{% if training.status == "Anwesend" %} checked data-toggle="modal" data-target="#{{ id }}"{% else %} onclick="anmelden('{{ training.referenz }}');"{% endif %}>
+								<span class="slider round"></span>
+							</label>
+						{% else %}
+							Die An-/Abmeldefrist für dieses Training ist abgelaufen.<br>Melden Sie sich bitte direkt bei einem Trainer.
+						{% endif %}
+						</center>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<i class="fa fa-map-marker"></i> {{ training.ort }}
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<i class="fa fa-bell"></i> {{ training.von }} - {{ training.bis }}
 					</div>
 					{% if training.details %}<br><br>
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<i class="fa fa-info"></i> {{ training.details }}
 					</div>
 					{% endif %}

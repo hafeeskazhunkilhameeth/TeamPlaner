@@ -10,6 +10,7 @@
   "team_von_verein",
   "saison_von",
   "saison_bis",
+  "logo",
   "mitglieder_uebersicht",
   "swissunihockey",
   "season",
@@ -78,9 +79,14 @@
    "fieldname": "team_id",
    "fieldtype": "Data",
    "label": "Team ID"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo Startseite"
   }
  ],
- "modified": "2020-04-08 12:58:15.194543",
+ "modified": "2020-04-09 11:10:28.415933",
  "modified_by": "Administrator",
  "module": "TeamPlaner",
  "name": "TeamPlaner Team",

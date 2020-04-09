@@ -34,6 +34,7 @@ base_template_path = "/teamplaner/templates/base.html"
 website_route_rules = [
 	{"from_route": "/me", "to_route": "ich"}
 ]
+#post_login = "teamplaner.utils.after_login_redirect"
 
 # Home Pages
 # ----------
@@ -43,7 +44,7 @@ home_page = "start"
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+	# "System Manager": "start"
 # }
 
 # Website user home page (by function)

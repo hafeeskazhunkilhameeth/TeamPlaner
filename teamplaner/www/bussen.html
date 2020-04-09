@@ -1,0 +1,26 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Meine Bussen") }}{% endblock %}
+{% block header %}<h1>{{ _("Meine Bussen") }}</h1>{% endblock %}
+
+{% block page_content %}
+<table class="table" style="width: 100%;">
+	<thead class="thead-dark">
+		<tr>
+			<th>Event</th>
+			<th>Begründung</th>
+			<th>Betrag in CHF</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for busse in bussen %}
+		<tr>
+			<td>{% if busse.training == 1 %}Training{% endif %}{% if busse.spiel == 1 %}Spiel{% endif %}</td>
+			<td>{{ busse.bemerkung }}</td>
+			<td>{{ busse.betrag }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<h2>Total: CHF {{ total }}</h2>
+{% endblock %}

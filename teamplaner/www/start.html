@@ -3,11 +3,15 @@
 {% block title %}{{ _("TeamPlaner - libracore") }}{% endblock %}
 
 {% block page_content %}
+{% if logo %}
+	<center><img src="{{ logo }}" style="max-width: 50%;"></center>
+{% else %}
 <div class="jumbotron">
-	<center><h1>TeamPlaner</h1></center>    
+	<center><h1>TeamPlaner</h1></center>
 	<center><p>Ein Tool von libracore zur Planung und Organisation von Sport-Terminen</p></center><br>
-	<center>{{ start_btn }}</center>
+	<center><a href="/login" class="btn btn-primary" role="button">Anmelden</a></center>
 </div>
+{% endif %}
 {% endblock %}
 
 

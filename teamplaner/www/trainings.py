@@ -36,6 +36,7 @@ def get_context(context):
 											ORDER BY `training`.`datum`""".format(datum=nowdate(), team=team, mail=user), as_dict=True)
 											
 	context['anwesenheiten'] = []
+	context["heute"] = nowdate()
 	for training in context['trainings']:
 		context['anwesenheiten'].append({
 			'training': training.name,

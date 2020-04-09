@@ -16,6 +16,10 @@ def get_context(context):
 	team = frappe.get_doc("TeamPlaner Team", _team)
 	context["tabelle"] = get_tabelle(team.season, team.league, team.game_class, team.group)
 	context["resultate"] = get_resultate(team.team_id, team.season)
+	context["season"] = team.season
+	context["league"] = team.league
+	context["game_class"] = team.game_class
+	context["group"] = team.group
 	alle_spieler = frappe.db.sql("""SELECT `parent` FROM `tabTeamplaner Team Verweis` WHERE `team` = '{team}'""".format(team=team.name), as_dict=True)
 	context["spieler_statistik"] = []
 	for spieler in alle_spieler:
