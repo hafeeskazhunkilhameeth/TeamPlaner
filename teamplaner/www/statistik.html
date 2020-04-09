@@ -1,0 +1,93 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Statistik") }}{% endblock %}
+{% block header %}<h1>{{ _("Statistik") }}</h1>{% endblock %}
+
+{% block page_content %}
+	<h2>{{ tabelle["data"]["title"] }}</h2>
+	<a style="color: #36414c;" href="https://api-v2.swissunihockey.ch/api/calendars?season={{ season }}&league={{ league }}&game_class={{ game_class }}&group={{ group }}"><img style="margin-bottom: 5px;" src="https://www.swissunihockey.ch/packages/su_spieldaten/blocks/su_spieldaten/img/ico-calendar-ics.svg" height="28" width="28"> Alle Spiele als iCalendar-Datei downloaden</a>
+	<table class="table" style="width: 100%; font-size: 13px;">
+		<thead class="thead-dark">
+			<tr>
+				<th>Rg.</th>
+				<th>Team</th>
+				<th>Sp</th>
+				<th>S</th>
+				<th>U</th>
+				<th>N</th>
+				<th>T</th>
+				<th>TD</th>
+				<th>P</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for ranking in tabelle["data"]["regions"][0]["rows"] %}
+			<tr>
+				{% for details in ranking["cells"] %}
+					{% if loop.index == 1 %}
+						<td>{{ details["text"][0] }}</td>
+					{% elif loop.index == 2 %}
+						<td><img src='{{ details["image"]["url"] }}'>
+					{% elif loop.index == 3 %}
+						<div class="hidden-xs">{{ details["text"][0] }}</div></td>
+					{% else %}
+						<td>{{ details["text"][0] }}</td>
+					{% endif %}
+				{% endfor %}
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<br><h2>{{ resultate["data"]["title"] }}</h2><br>
+	<table class="table" style="width: 100%; font-size: 14px;">
+		<thead class="thead-dark">
+			<tr>
+				<th>Wann</th>
+				<th>Heim</th>
+				<th>Gast</th>
+				<th>Resultat</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for spiel in resultate["data"]["regions"][0]["rows"] %}
+			<tr>
+				<td><div>{{ spiel["cells"][0]["text"][0] }}, {{ spiel["cells"][0]["text"][1] }}</div><div class="hidden-xs">{{ spiel["cells"][1]["text"][0] }}, {{ spiel["cells"][1]["text"][1] }}</div></td>
+				<td>{{ spiel["cells"][2]["text"][0] }}</td>
+				<td>{{ spiel["cells"][3]["text"][0] }}</td>
+				<td>{{ spiel["cells"][4]["text"][0] }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table><br>
+	<h2>Anwesenheitsstatistik</h2><br>
+	{% for spieler in spieler_statistik %}
+		<div id='{{ spieler["id"] }}'></div>
+	{% endfor %}
+	<script src="https://unpkg.com/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
+	<script>
+		{% for spieler in spieler_statistik %}
+			const data{{ spieler["id"]|replace("-", "") }} = {
+				labels: ["Anwesend", "Abwesend"
+				],
+				datasets: [
+					{
+						name: "Anwesend",
+						values: [{{ spieler["anwesend"]|int }}, {{ spieler["abwesend"]|int }}]
+					}
+				]
+			};
+
+			const chart{{ spieler["id"]|replace("-", "") }} = new frappe.Chart("#{{ spieler["id"] }}", {  // or a DOM element,
+														// new Chart() in case of ES6 module with above usage
+				title: "{{ spieler["spieler"] }}",
+				data: data{{ spieler["id"]|replace("-", "") }},
+				type: 'percentage',
+				height: 100,
+				colors: ['#00cc33', '#ff0000']
+			});
+		{% endfor %}
+	</script>
+{% endblock %}
+
+
+

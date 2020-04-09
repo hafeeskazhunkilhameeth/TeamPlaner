@@ -3,44 +3,119 @@
 {% block title %}{{ _("Spiele") }}{% endblock %}
 {% block header %}<h1>{{ _("Spiele") }}</h1>{% endblock %}
 
-{% block page_sidebar %}
-{% include "templates/pages/web_sidebar.html" %}
-{% endblock %}
-
 {% block page_content %}
-<div class="panel-group" id="accordion">
+<div id="accordion">
 {% for training in trainings %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-		  <h4 class="panel-title">
-			<a data-toggle="collapse" data-parent="#accordion" href="#{{ training.name }}">
-			{{ training.name }} ({{ teilnehmer[training.name] }} nehmen teil)<br>{% if training.aufgebot_status == 1 %}<i class="fa fa-check-circle"></i> Aufgebot verfügbar{% else %}<i class="fa fa-times-circle"></i> Aufgebot nicht verfügbar{% endif %}</a>
-		  </h4>
-		</div>
-		<div id="{{ training.name }}" class="panel-collapse collapse">
-		  <div class="panel-body">
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 70%"><i class="fa fa-bell"></i> von {{ training.von }} bis {{ training.bis }}<br>&nbsp;<i class="fa fa-map-marker"></i> {{ training.ort or 'Keine Angabe' }}</td>
-					<td style="width: 30%">{% if training.aufgebot_status == 1 %}<a onclick="show_aufgebot('{{ training.name }}')"><i class="fa fa-cloud-download"></i> Aufgebot</a>{% endif %}</td>
-				</tr>
-			</table>
-			<h4>Teilnehmer</h4>
-			<table style="width: 100%">
-				{% for sp in spieler[training.name] %}
-				<tr {% if sp[3] == frappe.session.user %}onclick="change_anwesenheit('{{ training.name }}', frappe.session.user, '{{ sp[2] }}');" {% endif %}style="{% if sp[2] == 'Anwesend' %}background-color: #50D050;{% else %}background-color: red;{% endif %}">
-					<td style="width: 10%; height: 30px;">&nbsp;{% if sp[3] == frappe.session.user %}<i class="fa fa-exchange"></i>{% else %}{% if sp[2] == 'Anwesend' %}<i class="fa fa-check-circle"></i>{% else %}<i class="fa fa-times-circle"></i>{% endif %}{% endif %}</td>
-					<td style="width 90%; height: 30px;">{{ sp[0] }} {{ sp[1] }}</td>
-				</tr>
+	{% set id = training.name|replace("0", "A")|replace("1", "B")|replace("2", "C")|replace("3", "D")|replace("4", "E")|replace("5", "F")|replace("6", "G")|replace("7", "H")|replace("8", "I")|replace("9", "J") %}
+	<div class="card">
+		<div class="card-header {% if training.status == "Abwesend" %} alert-danger{% else %} alert-success{% endif %}" data-toggle="collapse" href="#Training{{ id }}" style="cursor: pointer;">
+			<center><a class="collapsed card-link">
+				{{ frappe.utils.get_datetime(training.datum).strftime('%d.%m.%Y') }} - {{ training.gegner }}<br>
+				{% for status in anwesenheiten %}
+					{% if status['training'] == training.name %}
+						{{ status['spieler'] }} Spieler / {{ status['torwarte'] }} Goalie(s)
+					{% endif %}
 				{% endfor %}
-			</table>
-		  </div>
+			</a></center>
 		</div>
-	 </div>
-{% endfor %}
-</div> 
-{% endblock %}
+		<div id="Training{{ id }}" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<center><label class="switch">
+						<input type="checkbox"{% if training.status == "Anwesend" %} checked data-toggle="modal" data-target="#{{ id }}"{% else %} onclick="anmelden('{{ training.referenz }}');"{% endif %}>
+						<span class="slider round"></span>
+						</label></center>
+					</div>
+					<div class="col-sm-12">
+						<i class="fa fa-map-marker"></i> {{ training.ort }}
+					</div>
+					<div class="col-sm-12">
+						<i class="fa fa-bell"></i> {{ training.von }} - {{ training.bis }}
+					</div>
+					{% if training.details %}<br><br>
+					<div class="col-sm-12">
+						<i class="fa fa-info"></i> {{ training.details }}
+					</div>
+					{% endif %}
+					<div class="col-sm-12">
+						<center><button type="button" class="btn btn-dark" style="margin: 5px;" data-toggle="modal" data-target="#bemerkung{{ id }}">Bemerkung</button></center>
+					</div>
+				</div>
+				{% for _spieler in anwesenheiten %}
+					{% if _spieler['training'] == training.name %}
+					{% for spieler in _spieler['alle'] %}
+						{% if spieler.status == "Anwesend" %}
+							<div class="alert alert-success">
+								{{ spieler.vorname }} {{ spieler.nachname }}{% if spieler.bemerkung %}<br>{{ spieler.bemerkung }}{% endif %}
+							</div>
+						{% else %}
+							<div class="alert alert-danger">
+								{{ spieler.vorname }} {{ spieler.nachname }}<br>{{ spieler.bemerkung }}
+							</div>
+						{% endif %}
+					{% endfor %}
+					{% endif %}
+				{% endfor %} 
+			</div>
+		</div>
+	</div>
+	<!-- The Modal -->
+	<div class="modal" id="{{ id }}">
+	  <div class="modal-dialog">
+		<div class="modal-content">
 
+		  <!-- Modal Header -->
+		  <div class="modal-header">
+			<h4 class="modal-title">Bemerkung bezgl. Abmeldung</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+
+		  <!-- Modal body -->
+		  <div class="modal-body">
+			 <div class="form-group">
+			  <textarea class="form-control" rows="5" id="comment{{ training.referenz }}" required oninput="activate_btn('btn{{ training.referenz }}');"></textarea>
+			</div>
+		  </div>
+
+		  <!-- Modal footer -->
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal" id="btn{{ training.referenz }}" onclick="abmelden('{{ training.referenz }}');" disabled>Abmelden</button>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+	
+	<!-- The Modal -->
+	<div class="modal" id="bemerkung{{ id }}">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+
+		  <!-- Modal Header -->
+		  <div class="modal-header">
+			<h4 class="modal-title">Bemerkung hinzufügen</h4>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		  </div>
+
+		  <!-- Modal body -->
+		  <div class="modal-body">
+			 <div class="form-group">
+			  <textarea class="form-control" rows="5" id="bemerkung{{ training.referenz }}"></textarea>
+			</div>
+		  </div>
+
+		  <!-- Modal footer -->
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="bemerkung('{{ training.referenz }}');">Bemerkung erfassen</button>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+{% endfor %}
+</div>
+{% endblock %}
 
 
 

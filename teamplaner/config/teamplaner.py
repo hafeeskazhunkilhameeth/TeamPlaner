@@ -23,6 +23,12 @@ def get_data():
 					"name": "TeamPlaner Verein",
 					"label": _("Vereine"),
 					"description": _("Verwaltung der Vereine")
+				},
+				{
+					"type": "doctype",
+					"name": "TeamPlaner Bussen",
+					"label": _("Bussen Einstellungen"),
+					"description": _("Verwaltung der Bussen")
 				}
 			]
 		},

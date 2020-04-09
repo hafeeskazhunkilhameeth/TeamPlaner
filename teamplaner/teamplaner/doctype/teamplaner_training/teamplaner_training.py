@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils.data import add_days
+from frappe.utils.data import add_days, getdate
 
 class TeamPlanerTraining(Document):
 	def before_save(self):

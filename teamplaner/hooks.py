@@ -19,9 +19,9 @@ app_license = "MIT"
 # app_include_js = "/assets/teamplaner/js/teamplaner.js"
 
 # include js, css files in header of web template
-web_include_css = "/assets/teamplaner/css/teamplaner.css"
-web_include_js = "/assets/teamplaner/js/teamplaner.js"
-
+#web_include_css = "/assets/teamplaner/css/teamplaner.css"
+#web_include_js = "/assets/teamplaner/js/teamplaner.js"
+base_template_path = "/teamplaner/templates/base.html"
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 
@@ -31,9 +31,10 @@ web_include_js = "/assets/teamplaner/js/teamplaner.js"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
-# website_route_rules = [
-	# {"from_route": "/me", "to_route": "mein-profil"}
-# ]
+website_route_rules = [
+	{"from_route": "/me", "to_route": "ich"}
+]
+#post_login = "teamplaner.utils.after_login_redirect"
 
 # Home Pages
 # ----------
@@ -43,7 +44,7 @@ home_page = "start"
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+	# "System Manager": "start"
 # }
 
 # Website user home page (by function)
