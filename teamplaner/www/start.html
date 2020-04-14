@@ -3,7 +3,36 @@
 {% block title %}{{ _("TeamPlaner - libracore") }}{% endblock %}
 
 {% block page_content %}
-{% if logo %}
+{% if me %}
+<div class="row">
+<div class="col-md-8">
+{% endif %}
+<center><img src="assets/teamplaner/image/hcr_krone.png" style="max-width: 33%;"></center>
+{% if me %}
+</div>
+<div class="col-md-4">
+<img class="mx-auto d-block" src="{{ user_data.user_image }}" alt="{{ user_data.full_name }}" height="200" width="200"> 
+	<center>
+		<ul class="list-unstyled">
+			<li><a href="/update-password">{{ _("Passwort zurücksetzen") }}</a></li>
+			<li><a href="/bussen">{{ _("Meine Bussen") }}</a></li>
+			<li><a href="/trainings">{{ _("Trainings") }}</a></li>
+			<li><a href="/spiele">{{ _("Spiele") }}</a></li>
+			<li><a href="/statistik">{{ _("Statistik") }}</a></li>
+		</ul>
+	</center>
+	<div class="form-group">
+		<label for="usr">Name:</label>
+		<input type="text" class="form-control" id="usr" value="{{ spieler_data.vorname }} {{ spieler_data.nachname }}" readonly>
+		<label for="rueckennummer">Rückennummer:</label>
+		<input type="text" class="form-control" id="rueckennummer" value="{{ spieler_data.rueckennummer }}" readonly>
+		<label for="lizenz">Lizenz Nr.:</label>
+		<input type="text" class="form-control" id="lizenz" value="{{ spieler_data.lizenznummer }}" readonly>
+	</div>
+</div>
+</div>
+{% endif %}
+<!--{#{% if logo %}
 	<center><img src="{{ logo }}" style="max-width: 50%;"></center>
 {% else %}
 <div class="jumbotron">
@@ -11,7 +40,7 @@
 	<center><p>Ein Tool von libracore zur Planung und Organisation von Sport-Terminen</p></center><br>
 	<center><a href="/login" class="btn btn-primary" role="button">Anmelden</a></center>
 </div>
-{% endif %}
+{% endif %}#}-->
 {% endblock %}
 
 

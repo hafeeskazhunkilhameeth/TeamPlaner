@@ -32,7 +32,7 @@ base_template_path = "/teamplaner/templates/base.html"
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
 website_route_rules = [
-	{"from_route": "/me", "to_route": "ich"}
+	{"from_route": "/me", "to_route": "start"}
 ]
 #post_login = "teamplaner.utils.after_login_redirect"
 

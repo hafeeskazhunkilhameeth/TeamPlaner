@@ -6,7 +6,7 @@
 	{%- if child.url -%}
 	<a href="{{ child.url | abs_url }}" {{ child.target or '' }}
 	rel="nofollow">
-	{{ child.label }}
+	{{ child.label }}<br> {{ child }}
 	</a>
 	{%- endif -%}
 	</li>
