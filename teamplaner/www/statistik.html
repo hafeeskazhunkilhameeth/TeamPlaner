@@ -17,14 +17,12 @@
 				],
 				datasets: [
 					{
-						name: "Anwesend",
 						values: [{{ spieler["anwesend"]|int }}, {{ spieler["abwesend"]|int }}]
 					}
 				]
 			};
 
-			const chart{{ spieler["id"]|replace("-", "") }} = new frappe.Chart("#{{ spieler["id"] }}", {  // or a DOM element,
-														// new Chart() in case of ES6 module with above usage
+			const chart{{ spieler["id"]|replace("-", "") }} = new frappe.Chart("#{{ spieler["id"] }}", {
 				title: "{{ spieler["spieler"] }}",
 				data: data{{ spieler["id"]|replace("-", "") }},
 				type: 'percentage',
