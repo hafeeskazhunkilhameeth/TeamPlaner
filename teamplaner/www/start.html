@@ -1,6 +1,6 @@
 {% extends "templates/web.html" %}
 
-{% block title %}{{ _("TeamPlaner - libracore") }}{% endblock %}
+{% block title %}{{ _("TeamPlaner") }}{% endblock %}
 
 {% block page_content %}
 {% if me %}
@@ -11,15 +11,21 @@
 {% if me %}
 </div>
 <div class="col-md-4">
-<img class="mx-auto d-block" src="{{ user_data.user_image }}" alt="{{ user_data.full_name }}" height="200" width="200"> 
+<img class="mx-auto d-block" src="{{ user_data.user_image }}" alt="{{ user_data.full_name }}" height="200" width="200" style="margin-bottom: 5px;"> 
 	<center>
-		<ul class="list-unstyled">
-			<li><a href="/update-password">{{ _("Passwort zurücksetzen") }}</a></li>
-			<li><a href="/bussen">{{ _("Meine Bussen") }}</a></li>
-			<li><a href="/trainings">{{ _("Trainings") }}</a></li>
-			<li><a href="/spiele">{{ _("Spiele") }}</a></li>
-			<li><a href="/statistik">{{ _("Statistik") }}</a></li>
-		</ul>
+		<div class="btn-group">
+			<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+				Öffne...
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="/update-password">Passwort zurücksetzen</a>
+				<a class="dropdown-item" href="/bussen">Meine Bussen</a>
+				<a class="dropdown-item" href="/trainings">Trainings</a>
+				<a class="dropdown-item" href="/spiele">Spiele</a>
+				<a class="dropdown-item" href="/meisterschaft">Meisterschaft</a>
+				<a class="dropdown-item" href="/statistik">Statistik</a>
+			</div>
+		</div>
 	</center>
 	<div class="form-group">
 		<label for="usr">Name:</label>
