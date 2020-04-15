@@ -17,7 +17,7 @@
 	<tbody>
 	{% for spieler in team %}
 		<tr>
-			<td>{% if spieler.bild }}<img src="{{ spieler.bild }}" width="100px">{% else %}Kein Bild vorhanden{% endif %}</td>
+			<td>{% if spieler.bild %}<img src="{{ spieler.bild }}" width="100px">{% else %}Kein Bild vorhanden{% endif %}</td>
 			<td>{{ spieler.vorname }}</td>
 			<td>{{ spieler.nachname }}</td>
 			<td>{{ spieler.position }}</td>
