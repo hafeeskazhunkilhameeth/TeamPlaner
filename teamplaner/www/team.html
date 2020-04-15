@@ -1,0 +1,30 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Team") }}{% endblock %}
+
+{% block page_content %}
+<table class="table" style="width: 100%; font-size: 10px;">
+	<thead class="thead-dark">
+		<tr>
+			<th>Bild</th>
+			<th>Vorname</th>
+			<th>Nachname</th>
+			<th>Postion</th>
+			<th>Nummer</th>
+			<th>Lizenz</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for spieler in team %}
+		<tr>
+			<td><img src="{{ spieler.bild }}"></td>
+			<td>{{ spieler.vorname }}</td>
+			<td>{{ spieler.nachname }}</td>
+			<td>{{ spieler.position }}</td>
+			<td>{{ spieler.rueckennummer }}</td>
+			<td>{{ spieler.lizenznummer }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
